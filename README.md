@@ -1,5 +1,5 @@
 # PyWinDbg
-PyWinDbg is a command line is a basic Windows debugger written in Python for learning purposes.
+PyWinDbg is a basic command line Windows debugger written in Python for learning purposes.
 It currently supports loading an executable, attaching to a process, setting breakpoints, modifying and viewing registers, hooking `Win32` file creation functions, catching and detecting the cause of crashes, dll injection, process monitoring, and file monitoring.
  
 # Overview of Functions:

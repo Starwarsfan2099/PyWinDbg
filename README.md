@@ -96,40 +96,40 @@ Variables can be set with `s VARIABLE VALUE` or `set VARIABLE VALUE`.
 Variables can be viewed with `pv VARIABLE` or `print_variable VARIABLE`.
 
 ## Breakpoints
-![Setting a breakpoint](screenshots/setting_breakpoint.png)
+![Setting a breakpoint](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/setting_breakpoint.png)
 To set a breakpoint, a function address can be resolved with `function_resolve FUNCTION LIBRARY` (or `fr`) and the address can be set as a breakpoint with `break ADDRESS` (`b`).
 Or it can be automatically set with `break_funk FUNCTION LIBRARY` (`bf`).
 When a breakpoint is hit, the prompt will return so commands can be run.
 
 ## When a breakpoint is hit
-![Printing registers](screenshots/print_registers.png)
+![Printing registers](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/print_registers.png)
 `print_reg` or `pr` will print all registers. 
 `pr REGISTER` will print only that specific register.
 `set_reg REGISTER VALUE` or `sr REGISTER VALUE` sets a specified register to that value.
 
-![Dump context](screenshots/dump_context.png)
+![Dump context](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/dump_context.png)
 `dc` or `dump_context` will print information from the current registers, color coding what they point to.
 
 `c` or `continue` will continue debugging until the next breakpoint is hit.
 
 ## Crash mode
-![Crash mode](screenshots/crash_mode.png)
+![Crash mode](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/crash_mode.png)
 Crash mode detects `exception_debug_event`, determines the cause of the crash, and prints lots of useful output.
 This can be enabled from the prompt via the variables with `set crash-mode true` or via the command line options with `-c`.
 
 ## Created Files Mode
-![File hooking mode](screenshots/file_mode.png)
+![File hooking mode](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/file_mode.png)
 Hooks several Windows functions and prints any files made, deleted, or modified.
 Enabled with `set file-mode true` or from the command line options with `-f`.
 
 ## DLL injection
-![DLL injection](screenshots/dll_inject.png)
+![DLL injection](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/dll_inject.png)
 `inject_dll PID DLL` (`id`) will attempt to inject the specified dll into the specified process PID.
 You must have proper privileges and be injecting to a same bit process.
 
 ## Tools
 ### File monitor
-![File monitoring mode](screenshots/file_monitor.png)
+![File monitoring mode](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/file_monitor.png)
 File monitoring works different from the file hooking mode, in that it monitors a directory for file creation, modification, and deletion.
 It will also attempt to dump the contents of the file.
 The tool can be used with `file_monitor` (`fm`) or from the command line with `-fm`.
@@ -137,7 +137,7 @@ By default it monitors Windows temp directories, but a specific directory can be
 
 ### Process monitor
 
-![Process monitor mode](screenshots/process_monitor.png)
+![Process monitor mode](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/process_monitor.png)
 The Process monitor tool prints information for processes started or stopped.
 Launched with `process_monitor` (`pm`) or from the command line options with `-pm`.
 

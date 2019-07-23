@@ -1,0 +1,12 @@
+# Don't track content of these folders
+.idea/
+build/
+
+
+#      Files      #
+###################
+*.spec
+*.obj
+*.exp
+*.lib
+*.pyc

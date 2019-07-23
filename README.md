@@ -1,6 +1,6 @@
 # PyWinDbg
 PyWinDbg is a basic command line Windows debugger written in Python for learning purposes.
-It currently supports loading an executable, attaching to a process, setting breakpoints, modifying and viewing registers, hooking `Win32` file creation functions, catching and detecting the cause of crashes, dll injection, process monitoring, and file monitoring.
+It currently supports loading an executable, attaching to a process, setting breakpoints, modifying and viewing registers, hooking `Win32` file creation functions, catching and detecting the cause of crashes, dll injection, process monitoring, file monitoring, and executable information dumping.
  
 # Overview of Functions:
 ## Commands:
@@ -141,6 +141,16 @@ By default it monitors Windows temp directories, but a specific directory can be
 The Process monitor tool prints information for processes started or stopped.
 Launched with `process_monitor` (`pm`) or from the command line options with `-pm`.
 
+### Dumping process or executable info
+
+`di` or `dump_info` can be used to dump information on the currently attached process if no arguments are passed.
+If a PID is passed, it will dump the some information.
+If an executable or DLL is passed, it will dump the headers, sections, architecture information, and more.
+
+![Dumping process information](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/dump_info_3.png)
+![Dumping exe information](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/dump_info_1.png)
+![More exe information](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/dump_info_2.png)
+
 ## Other notes
 
 ### Executables
@@ -180,3 +190,18 @@ Launched with `process_monitor` (`pm`) or from the command line options with `-p
 - Add shellcode injection.
 - Dump SEH after breakpoint is hit.
 - Memory and hardware breakpoints.
+
+## Dependencies
+
+- pefile
+- psutil
+- win32con
+- win32api
+- win32security
+- win32file
+- wmi
+- pythoncom
+- tempfile
+- colorama
+- argparse
+- cPickle

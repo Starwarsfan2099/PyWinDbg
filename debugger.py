@@ -1,6 +1,6 @@
 # encoding=utf8
 # debugger.py
-# Created by AJ Clark on 6/4/2019
+# Created by Starwarfan2099 on 6/4/2019
 
 import utilities
 import debuggerUtilities as dbgUtils

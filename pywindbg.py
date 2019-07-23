@@ -1,12 +1,10 @@
 # pywindbg.py
-# Created by AJ Clark on 4/22/2019
+# Created by Starwarsfan2099 on 4/22/2019
 
-import pydbg
 import argparse
 import utilities
 import commandParse
 from colorama import Fore
-import debugger
 
 version = "0.1"
 utils = utilities.Utilities()
@@ -29,7 +27,6 @@ parser.add_argument("-pm", "--process_monitor", help="starts monitoring all crea
 parser.add_argument("-fm", "--file_monitor", help="monitors file modification, creation, and deletion.", action="store_true")
 args = parser.parse_args()
 parser = commandParse.Parser()
-#dbg = debugger.debugger()
 
 if args.log is not None:                                            # Log file
     parser.variables["logfile"] = args.log
@@ -45,7 +42,7 @@ if args.debug is True:                                              # Debug mode
     parser.variables["debug"] = True
     parser.variableParse("set debug True")
     utils.dbgPrint("[*] Debug = True", Fore.GREEN)
-if args.hide is True:                                              # Hide debugger
+if args.hide is True:                                               # Hide debugger
     parser.variables["hide-debugger"] = True
     parser.variableParse("set hide-debugger True")
     utils.dbgPrint("[*] Hide-debugger = True", Fore.GREEN)
@@ -53,13 +50,13 @@ if args.crash_mode is True:                                         # Crash Mode
     parser.variables["crash-mode"] = True
     parser.variableParse("set crash-mode True")
     utils.dbgPrint("[*] Crash-mode = True", Fore.GREEN)
-if args.file_mode is True:                                         # File Mode
+if args.file_mode is True:                                          # File Mode
     parser.variables["file-mode"] = True
     parser.variableParse("set file-mode True")
     utils.dbgPrint("[*] File-mode = True", Fore.GREEN)
 if args.process_monitor is True:                                    # Process monitor
     parser.startProcessMonitor()
-if args.file_monitor is True:                                    # File monitor
+if args.file_monitor is True:                                       # File monitor
     parser.startFileMonitor("fm")
 
 utils.dbgPrint("")

@@ -1,7 +1,6 @@
 # utilities.py
-# Created by AJ Clark on 4/22/19
+# Created by Starwarsfan2099 on 4/22/19
 
-import datetime
 from colorama import init, Fore, Style
 
 init(autoreset=True)

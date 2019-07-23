@@ -19,7 +19,7 @@ class Parser:
     __instance = None
 
     @staticmethod
-    def getInstance():                                      # several modules.
+    def getInstance():
         """ Static access method. """
         if Parser.__instance == None:
             Parser()
@@ -216,7 +216,8 @@ class Parser:
                 if value is False:
                     utils.dbgPrint("\n[-] Error, check register name or thread id.", Fore.RED)
                     return False
-                utils.dbgPrint("\n[*] (Thread: %d) %s: 0x%08x" % (thread, register, value), Fore.GREEN)
+                hexRegister = "%x" % value
+                utils.dbgPrint("\n[*] (Thread: %d) %s: 0x%08x, - Decimal: %d, ASCII: %s" % (thread, register, value, value, hexRegister.decode("hex)")), Fore.GREEN)
 
     def breakpointParse(self, command):
         command = command.split()

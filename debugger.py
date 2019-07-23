@@ -6,7 +6,7 @@ import utilities
 import debuggerUtilities as dbgUtils
 from pydbg import *
 from pydbg.defines import *
-from colorama import init, Fore
+from colorama import Fore
 import pefile
 import os
 import struct
@@ -276,27 +276,48 @@ class debugger:
             thread_handle = self.dbg.open_thread(thread_id)
             context = self.dbg.get_thread_context(thread_handle)
             utils.dbgPrint("\n[*] Thread id: %d" % thread_id, Fore.GREEN)
-            utils.dbgPrint("[*] EIP: 0x%08x" % context.Eip, Fore.GREEN)
-            utils.dbgPrint("[*] ESP: 0x%08x" % context.Esp, Fore.GREEN)
-            utils.dbgPrint("[*] EBP: 0x%08x" % context.Ebp, Fore.GREEN)
-            utils.dbgPrint("[*] EAX: 0x%08x" % context.Eax, Fore.GREEN)
-            utils.dbgPrint("[*] EBX: 0x%08x" % context.Ebx, Fore.GREEN)
-            utils.dbgPrint("[*] ECX: 0x%08x" % context.Ecx, Fore.GREEN)
-            utils.dbgPrint("[*] EDX: 0x%08x" % context.Edx, Fore.GREEN)
-        return True
+            hexRegister = "%x" % context.Eip
+            utils.dbgPrint("[*] EIP: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Eip, context.Eip, hexRegister.decode("hex")), Fore.GREEN)
+            hexRegister = "%x" % context.Esp
+            utils.dbgPrint("[*] ESP: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Esp, context.Esp, hexRegister.decode("hex")),Fore.GREEN)
+            hexRegister = "%x" % context.Ebp
+            utils.dbgPrint("[*] EBP: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Ebp, context.Ebp, hexRegister.decode("hex")), Fore.GREEN)
+            hexRegister = "%x" % context.Eax
+            utils.dbgPrint("[*] EAX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Eax, context.Eax, hexRegister.decode("hex")), Fore.GREEN)
+            hexRegister = "%x" % context.Ebx
+            utils.dbgPrint("[*] EBX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Ebx, context.Ebx, hexRegister.decode("hex")), Fore.GREEN)
+            hexRegister = "%x" % context.Ecx
+            utils.dbgPrint("[*] ECX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Ecx, context.Ecx, hexRegister.decode("hex")), Fore.GREEN)
+            hexRegister = "%x" % context.Eidx
+            utils.dbgPrint("[*] EDX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Edx, context.Edx, hexRegister.decode("hex")), Fore.GREEN)
+            return True
 
     def getRegister(self, register, thread=None):
         if thread is None:
             for thread_id in self.dbg.enumerate_threads():
                 thread_handle = self.dbg.open_thread(thread_id)
                 context = self.dbg.get_thread_context(thread_handle)
-                if register == "EIP": utils.dbgPrint("[*] (Thread %d) EIP: 0x%08x" % (thread_id, context.Eip), Fore.GREEN)
-                elif register == "ESP": utils.dbgPrint("[*] (Thread %d) ESP: 0x%08x" % (thread_id, context.Esp), Fore.GREEN)
-                elif register == "EBP": utils.dbgPrint("[*] (Thread %d) EBP: 0x%08x" % (thread_id, context.Ebp), Fore.GREEN)
-                elif register == "EAX": utils.dbgPrint("[*] (Thread %d) EAX: 0x%08x" % (thread_id, context.Eax), Fore.GREEN)
-                elif register == "EBX": utils.dbgPrint("[*] (Thread %d) EBX: 0x%08x" % (thread_id, context.Ebx), Fore.GREEN)
-                elif register == "ECX": utils.dbgPrint("[*] (Thread %d) ECX: 0x%08x" % (thread_id, context.Ecx), Fore.GREEN)
-                elif register == "EDX": utils.dbgPrint("[*] (Thread %d) EDX: 0x%08x" % (thread_id, context.Edx), Fore.GREEN)
+                if register == "EIP":
+                    hexRegister = "%x" % context.Eip
+                    utils.dbgPrint("[*] (Thread %d) EIP: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Eip, context.Eip, hexRegister.decode("hex")), Fore.GREEN)
+                elif register == "ESP":
+                    hexRegister = "%x" % context.Esp
+                    utils.dbgPrint("[*] (Thread %d) ESP: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Esp, context.Esp, hexRegister.decode("hex")), Fore.GREEN)
+                elif register == "EBP":
+                    hexRegister = "%x" % context.Ebp
+                    utils.dbgPrint("[*] (Thread %d) EBP: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Ebp, context.Ebp, hexRegister.decode("hex")), Fore.GREEN)
+                elif register == "EAX":
+                    hexRegister = "%x" % context.Eax
+                    utils.dbgPrint("[*] (Thread %d) EAX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Eax, context.Eax, hexRegister.decode("hex")), Fore.GREEN)
+                elif register == "EBX":
+                    hexRegister = "%x" % context.Ebx
+                    utils.dbgPrint("[*] (Thread %d) EBX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Ebx, context.Ebx, hexRegister.decode("hex")), Fore.GREEN)
+                elif register == "ECX":
+                    hexRegister = "%x" % context.Ecx
+                    utils.dbgPrint("[*] (Thread %d) ECX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Ecx, context.Ecx, hexRegister.decode("hex")), Fore.GREEN)
+                elif register == "EDX":
+                    hexRegister = "%x" % context.Edx
+                    utils.dbgPrint("[*] (Thread %d) EDX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Edx, context.Edx, hexRegister.decode("hex")), Fore.GREEN)
                 else: return False
         else:
             for thread_id in self.dbg.enumerate_threads():

@@ -15,7 +15,7 @@ class Utilities:
     @staticmethod                                           # We need one single instance of this class shared across
     def getInstance():                                      # several modules.
         """ Static access method. """
-        if Utilities.__instance == None:
+        if Utilities.__instance is None:
             Utilities()
         return Utilities.__instance
 

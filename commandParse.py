@@ -216,8 +216,8 @@ class Parser:
                 if value is False:
                     utils.dbgPrint("\n[-] Error, check register name or thread id.", Fore.RED)
                     return False
-                hexRegister = "%x" % value
-                utils.dbgPrint("\n[*] (Thread: %d) %s: 0x%08x, - Decimal: %d, ASCII: %s" % (thread, register, value, value, hexRegister.decode("hex)")), Fore.GREEN)
+                hexRegister = "%08x" % value
+                utils.dbgPrint("\n[*] (Thread: %d) %s: 0x%08x, - Decimal: %d, ASCII: %s" % (thread, register, value, value, hexRegister.strip().decode("hex)")), Fore.GREEN)
 
     def breakpointParse(self, command):
         command = command.split()

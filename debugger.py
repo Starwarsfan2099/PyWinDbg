@@ -276,20 +276,20 @@ class debugger:
             thread_handle = self.dbg.open_thread(thread_id)
             context = self.dbg.get_thread_context(thread_handle)
             utils.dbgPrint("\n[*] Thread id: %d" % thread_id, Fore.GREEN)
-            hexRegister = "%x" % context.Eip
-            utils.dbgPrint("[*] EIP: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Eip, context.Eip, hexRegister.decode("hex")), Fore.GREEN)
-            hexRegister = "%x" % context.Esp
-            utils.dbgPrint("[*] ESP: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Esp, context.Esp, hexRegister.decode("hex")),Fore.GREEN)
-            hexRegister = "%x" % context.Ebp
-            utils.dbgPrint("[*] EBP: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Ebp, context.Ebp, hexRegister.decode("hex")), Fore.GREEN)
-            hexRegister = "%x" % context.Eax
-            utils.dbgPrint("[*] EAX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Eax, context.Eax, hexRegister.decode("hex")), Fore.GREEN)
-            hexRegister = "%x" % context.Ebx
-            utils.dbgPrint("[*] EBX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Ebx, context.Ebx, hexRegister.decode("hex")), Fore.GREEN)
-            hexRegister = "%x" % context.Ecx
-            utils.dbgPrint("[*] ECX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Ecx, context.Ecx, hexRegister.decode("hex")), Fore.GREEN)
-            hexRegister = "%x" % context.Eidx
-            utils.dbgPrint("[*] EDX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Edx, context.Edx, hexRegister.decode("hex")), Fore.GREEN)
+            hexRegister = "%08x" % context.Eip
+            utils.dbgPrint("[*] EIP: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Eip, context.Eip, hexRegister.strip().decode("hex")), Fore.GREEN)
+            hexRegister = "%08x" % context.Esp
+            utils.dbgPrint("[*] ESP: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Esp, context.Esp, hexRegister.strip().decode("hex")),Fore.GREEN)
+            hexRegister = "%08x" % context.Ebp
+            utils.dbgPrint("[*] EBP: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Ebp, context.Ebp, hexRegister.strip().decode("hex")), Fore.GREEN)
+            hexRegister = "%08x" % context.Eax
+            utils.dbgPrint("[*] EAX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Eax, context.Eax, hexRegister.strip().decode("hex")), Fore.GREEN)
+            hexRegister = "%08x" % context.Ebx
+            utils.dbgPrint("[*] EBX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Ebx, context.Ebx, hexRegister.strip().decode("hex")), Fore.GREEN)
+            hexRegister = "%08x" % context.Ecx
+            utils.dbgPrint("[*] ECX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Ecx, context.Ecx, hexRegister.strip().decode("hex")), Fore.GREEN)
+            hexRegister = "%08x" % context.Edx
+            utils.dbgPrint("[*] EDX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Edx, context.Edx, hexRegister.strip().decode("hex")), Fore.GREEN)
             return True
 
     def getRegister(self, register, thread=None):
@@ -298,26 +298,26 @@ class debugger:
                 thread_handle = self.dbg.open_thread(thread_id)
                 context = self.dbg.get_thread_context(thread_handle)
                 if register == "EIP":
-                    hexRegister = "%x" % context.Eip
-                    utils.dbgPrint("[*] (Thread %d) EIP: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Eip, context.Eip, hexRegister.decode("hex")), Fore.GREEN)
+                    hexRegister = "%08x" % context.Eip
+                    utils.dbgPrint("[*] (Thread %d) EIP: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Eip, context.Eip, hexRegister.strip().decode("hex")), Fore.GREEN)
                 elif register == "ESP":
-                    hexRegister = "%x" % context.Esp
-                    utils.dbgPrint("[*] (Thread %d) ESP: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Esp, context.Esp, hexRegister.decode("hex")), Fore.GREEN)
+                    hexRegister = "%08x" % context.Esp
+                    utils.dbgPrint("[*] (Thread %d) ESP: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Esp, context.Esp, hexRegister.strip().decode("hex")), Fore.GREEN)
                 elif register == "EBP":
-                    hexRegister = "%x" % context.Ebp
-                    utils.dbgPrint("[*] (Thread %d) EBP: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Ebp, context.Ebp, hexRegister.decode("hex")), Fore.GREEN)
+                    hexRegister = "%08x" % context.Ebp
+                    utils.dbgPrint("[*] (Thread %d) EBP: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Ebp, context.Ebp, hexRegister.strip().decode("hex")), Fore.GREEN)
                 elif register == "EAX":
-                    hexRegister = "%x" % context.Eax
-                    utils.dbgPrint("[*] (Thread %d) EAX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Eax, context.Eax, hexRegister.decode("hex")), Fore.GREEN)
+                    hexRegister = "%08x" % context.Eax
+                    utils.dbgPrint("[*] (Thread %d) EAX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Eax, context.Eax, hexRegister.strip().decode("hex")), Fore.GREEN)
                 elif register == "EBX":
-                    hexRegister = "%x" % context.Ebx
-                    utils.dbgPrint("[*] (Thread %d) EBX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Ebx, context.Ebx, hexRegister.decode("hex")), Fore.GREEN)
+                    hexRegister = "%08x" % context.Ebx
+                    utils.dbgPrint("[*] (Thread %d) EBX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Ebx, context.Ebx, hexRegister.strip().decode("hex")), Fore.GREEN)
                 elif register == "ECX":
-                    hexRegister = "%x" % context.Ecx
-                    utils.dbgPrint("[*] (Thread %d) ECX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Ecx, context.Ecx, hexRegister.decode("hex")), Fore.GREEN)
+                    hexRegister = "%08x" % context.Ecx
+                    utils.dbgPrint("[*] (Thread %d) ECX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Ecx, context.Ecx, hexRegister.strip().decode("hex")), Fore.GREEN)
                 elif register == "EDX":
-                    hexRegister = "%x" % context.Edx
-                    utils.dbgPrint("[*] (Thread %d) EDX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Edx, context.Edx, hexRegister.decode("hex")), Fore.GREEN)
+                    hexRegister = "%08x" % context.Edx
+                    utils.dbgPrint("[*] (Thread %d) EDX: 0x%08x, - Decimal: %d, ASCII: %s" % (thread_id, context.Edx, context.Edx, hexRegister.strip().decode("hex")), Fore.GREEN)
                 else: return False
         else:
             for thread_id in self.dbg.enumerate_threads():

@@ -78,6 +78,7 @@ class debugger:
 
     def run(self):
         self.getLibraries()
+        self.enableCrashMode()
         self.dbg.run()                      # Wrapper for debug_event_loop()
 
     def enableHidden(self):
@@ -541,6 +542,7 @@ class debugger:
             return DBG_EXCEPTION_NOT_HANDLED
 
         self.dbg.set_callback(EXCEPTION_ACCESS_VIOLATION, check_accessv)
+        utils.dbgPrint("\n[*] Crash mode hooks in place.\n", Fore.GREEN, verbose=self.verbose)
 
     def disableCrashMode(self):
         def doNothing(dbg):

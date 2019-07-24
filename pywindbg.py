@@ -33,7 +33,7 @@ if args.log is not None:                                            # Log file
     parser.variableParse("set logging True")
     utils.dbgPrint("[*] Logfile = %s" % args.log, Fore.GREEN)
 if args.open is not None:                                           # Opening a file from command line
-    parser.openAndAttach(args.file)
+    parser.openAndAttach(args.open)
 if args.verbose is True:                                            # Verbose mode
     parser.variables["verbose"] = True
     parser.variableParse("set verbose True")

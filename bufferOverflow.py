@@ -10,8 +10,8 @@ msvcrt.printf("Printing...")
 buffer = c_char_p("AAAAA")
 print buffer
 # The overflow string
-overflow = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+overflow = "A" * 100
 
 # Run the overflow
 msvcrt.strcpy(buffer, overflow)
-print "Succsess"
+print "If you can see this, the overflow failed :("

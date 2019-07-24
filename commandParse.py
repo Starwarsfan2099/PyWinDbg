@@ -297,7 +297,7 @@ class Parser:
                 else:
                     utils.dbgPrint("\n[-] Incorrect variable value given\n", Fore.RED)
                     return
-            elif input == "file-mode":  # Crash Mode
+            elif input == "file-mode":                                                  # File Mode
                 if value.lower() == "true":
                     self.variables[input] = True
                     self.fileMode = True

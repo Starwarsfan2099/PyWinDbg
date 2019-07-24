@@ -183,6 +183,8 @@ If an executable or DLL is passed, it will dump the headers, sections, architect
 
 `bufferOverflow.py`: Source for the compiled `bufferOverflow.exe` file included.
 
+Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use my local install of upx, you'll probably have to change the path or remove the upx option.
+
 ## TODO
 
 - Add memory reading/writing.

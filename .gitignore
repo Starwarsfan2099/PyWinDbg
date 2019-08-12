@@ -2,14 +2,9 @@
 .idea/
 build/
 
-
-#      Files      #
-###################
+# Or these files
 *.spec
 *.obj
 *.exp
 *.lib
 *.pyc
-*.pyc
-*.pyc
-pydbg/pydbg.pyc

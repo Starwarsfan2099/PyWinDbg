@@ -31,8 +31,9 @@ by Starwarsfan2099
  fr | resolve FUNC LIB              Returns the address for a function from a dll.
  dc | dump_context                  Returns current EIP disassembled and stack unwind.
  di | dump_info EXE|DLL|PID         Return information on PID, or debugging EXE, or supplied DLL.
- sr | set_register REG VAL ID       Sets register REG to VAL in thread ID, all threads if no ID is specified.
+ sr | set_reg REG VAL ID            Sets register REG to VAL in thread ID, all threads if no ID is specified.
  id | inject_dll PID DLL            Injects DLL into Process PID.
+ wa | write_adr ADD LEN DATA        Writes data to an address.
 
 
 Tools:
@@ -47,15 +48,12 @@ Tools:
       logfile | FILE.txt            Text file to log to, must be .txt.
    crash-mode | True|False          Enables crash mode.
     file-mode | True|False          Enables file hooking mode.
-hide-debugger | True|False          Enables file hooking mode.
+hide-debugger | True|False          Hide the debugger after first breakpoint.
 
 
  More help:
  ?p | ?print                        Print methods help.
  ?b | ?breakpoint                   Breakpoint methods help.
-
-
-[pywindbg]>
 ````
 
 ## Command line options:

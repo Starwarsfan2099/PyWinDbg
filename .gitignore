@@ -12,3 +12,4 @@ build/
 *.pyc
 *.pyc
 *.pyc
+pydbg/pydbg.pyc

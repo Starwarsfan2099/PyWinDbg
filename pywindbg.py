@@ -14,6 +14,7 @@ utils.dbgPrint("PyWinDbg", Fore.GREEN)
 utils.dbgPrint("Version %s" % version)
 utils.dbgPrint("by Starwarsfan2099\n")
 
+# Add all our command line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--pid", type=int, help="process PID to attach to.")
 parser.add_argument("-o", "--open", type=str, help="executable to launch and attach to.")
@@ -28,6 +29,7 @@ parser.add_argument("-fm", "--file_monitor", help="monitors file modification, c
 args = parser.parse_args()
 parser = commandParse.Parser()
 
+# Parse the command line arguments given, if any
 if args.log is not None:                                            # Log file
     parser.variables["logfile"] = args.log
     parser.variableParse("set logging True")
@@ -60,5 +62,7 @@ if args.file_monitor is True:                                       # File monit
     parser.startFileMonitor("fm")
 
 utils.dbgPrint("")
+
+# Start the main command prompt loop
 while True:
     parser.runCommand(raw_input(utils.dbgPrint("[%s]> " % parser.processName, Fore.GREEN, inputLine=True)))

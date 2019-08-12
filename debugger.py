@@ -78,7 +78,6 @@ class debugger:
 
     def run(self):
         self.getLibraries()
-        self.enableCrashMode()
         self.dbg.run()                      # Wrapper for debug_event_loop()
 
     def enableHidden(self):
@@ -229,10 +228,27 @@ class debugger:
                 utils.dbgPrint("[+] DLL Loaded(%s) > %s" % (modules[1], modules[0]), Fore.BLUE)
         return True
 
+    def readMemory(self, address, length):
+        address = int(address, 0)
+        value = self.dbg.read_process_memory(address, int(length))
+        hexValue= utils.toHex(value)
+        utils.dbgPrint("\n[*] Value: ", Fore.GREEN, dualline=True, secondline="%s\n" % value)
+        utils.dbgPrint("\n[*] Hex: ", Fore.GREEN, dualline=True, secondline="%s\n" % hexValue)
+        return True
+
+    def writeMemory(self, command):
+        address = int(command.split()[1], 0)
+        length = int(command.split()[2])
+        data = command.split()[3]
+        self.dbg.write_process_memory(address, data, length)
+        utils.dbgPrint("\n[+] Wrote %s to 0x%08x\n" % (data, address), Fore.GREEN)
+        return True
+
     def getDllFunctionAddress(self, function, library):
         try:
             address = self.dbg.func_resolve_debuggee(library, function)
-        except:
+        except Exception as e:
+            utils.dbgPrint("\n[-] Got error: %s\n" % e, Fore.RED, verbose=self.debug)
             utils.dbgPrint("\n[-] Error reading memory, is debugger attached to a process?\n", Fore.RED)
             return False
         if address == 0:
@@ -587,58 +603,6 @@ class debugger:
         CreateFileA = self.dbg.func_resolve_debuggee("kernel32.dll", "CreateFileA")
         self.dbg.bp_set(CreateFileA, description="CreateFileA", handler=doNothing)
         self.dbg.bp_set(CreateFileW, description="CreateFileW", handler=doNothing)
-
-    def dllInject2(self, pid, dll):
-        kernel32 = windll.kernel32
-        utils.dbgPrint("\n[*] Dll path: %s" % dll, Fore.BLUE)
-        pageRWPriv = 0x04
-        PROCESS_ALL_ACCESS = 0x1F0FFF
-        virtualMemory = 0x3000
-        dllLength = len(dll)
-        utils.dbgPrint("[+] Getting process handle for PID: %d " % pid, Fore.GREEN)
-        hProcess = kernel32.OpenProcess(PROCESS_ALL_ACCESS, False, pid)
-        if hProcess is None:
-            utils.dbgPrint("[-] Unable to get process handle.", Fore.RED)
-            return False
-        utils.dbgPrint("[+] Allocating space for DLL PATH.", Fore.GREEN)
-        dllPathAddress = kernel32.VirtualAllocEx(hProcess,
-                                                 dllLength,
-                                                 0,
-                                                 virtualMemory,
-                                                 pageRWPriv)
-        boolWritten = c_int(0)
-        utils.dbgPrint("[+] Writing DLL PATH to current process space.", Fore.GREEN)
-        kernel32.WriteProcessMemory(hProcess,
-                                    dllPathAddress,
-                                    dll,
-                                    dllLength,
-                                    byref(boolWritten))
-        utils.dbgPrint("[+] Resolving Call Specific functions & libraries.", Fore.GREEN)
-        kernel32DllHandler_addr = kernel32.GetModuleHandleA("kernel32")
-        utils.dbgPrint("[+] Resolved kernel32 library at 0x%08x." % kernel32DllHandler_addr, Fore.GREEN, verbose=self.verbose)
-        LoadLibraryA_func_addr = kernel32.GetProcAddress(kernel32DllHandler_addr, "LoadLibraryA")
-        utils.dbgPrint("[+] Resolved LoadLibraryA function at 0x%08x." % LoadLibraryA_func_addr, Fore.GREEN, verbose=self.verbose)
-        thread_id = c_ulong(0)
-        utils.dbgPrint("[+] Creating Remote Thread to load our DLL.", Fore.GREEN)
-        if not kernel32.CreateRemoteThread(hProcess,
-                                           None,
-                                           0,
-                                           LoadLibraryA_func_addr,
-                                           dllPathAddress,
-                                           0,
-                                           byref(thread_id)):
-            error = kernel32.GetLastError()
-            utils.dbgPrint("[-] Injection Failed, exiting with error code: %s." % error, Fore.RED)
-            if error == "5" or error == 5:
-                utils.dbgPrint("[-] Received error code 5, you are trying to inject into 32 bit process from a 64 bit or vice versa.\n", Fore.RED)
-                return False
-            elif error == "4":
-                utils.dbgPrint("[-] Received error code 4, you are trying to inject into a different privileged process.\n", Fore.RED)
-                return False
-        else:
-            error = kernel32.GetLastError()
-            utils.dbgPrint("[+] Remote Thread 0x%08x created, DLL code injected with code: %s\n" % (thread_id.value, error), Fore.GREEN)
-            return True
 
     def dllInject(self, pid, dll):
         utils.dbgPrint("")

@@ -9,6 +9,7 @@ msvcrt.printf("Printing...")
 # Create the 5-byte destination buffer
 buffer = c_char_p("AAAAA")
 print buffer
+
 # The overflow string
 overflow = "AAAAAAAAAAAAAAAAAAAAAAAAA"
 

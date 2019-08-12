@@ -1855,6 +1855,7 @@ class pydbg:
 
                     # we use a crude approach here. read 256 bytes and cut on NULL char. not very beautiful, but reading
                     # 1 byte at a time is very slow.
+                    utils.dbgPrint("Read address: 0x%08x" % current_address, Fore.GREEN, verbose=self.debug)
                     name_buffer = self.read_process_memory(current_address, 256)
                     name_buffer = name_buffer[:name_buffer.find("\0")]
 

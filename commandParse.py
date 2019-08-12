@@ -67,6 +67,7 @@ class Parser:
         utils.dbgPrint(" di | dump_info EXE|DLL|PID         Return information on PID, or debugging EXE, or supplied DLL.")
         utils.dbgPrint(" sr | set_reg REG VAL ID            Sets register REG to VAL in thread ID, all threads if no ID is specified.")
         utils.dbgPrint(" id | inject_dll PID DLL            Injects DLL into Process PID.")
+        utils.dbgPrint(" wa | write_adr ADD LEN DATA        Writes data to an address.")
 
         utils.dbgPrint("\n")
 
@@ -83,7 +84,7 @@ class Parser:
         utils.dbgPrint("      logfile | FILE.txt            Text file to log to, must be .txt.")
         utils.dbgPrint("   crash-mode | True|False          Enables crash mode.")
         utils.dbgPrint("    file-mode | True|False          Enables file hooking mode.")
-        utils.dbgPrint("hide-debugger | True|False          Enables file hooking mode.")
+        utils.dbgPrint("hide-debugger | True|False          Hide the debugger after first breakpoint.")
 
         utils.dbgPrint("\n")
 
@@ -97,6 +98,7 @@ class Parser:
         utils.dbgPrint(" \nPrint help:", Fore.GREEN)
         utils.dbgPrint(" pv | print_var VARIABLE           Specifically prints a debugger variable.")
         utils.dbgPrint(" pr | print_reg REGISTER           Prints the value in the specified REGISTER")
+        utils.dbgPrint(" pa | print_adr ADDRESS LENGTH     Prints the value stored in memory at ADDRESS")
         utils.dbgPrint("\n")
 
     def breakpointHelp(self):
@@ -109,7 +111,7 @@ class Parser:
 
     def runCommand(self, command):
         if self.variables["logging"] is True:
-            utils.dbgLogFileWrite("\n[%s]> %s" % (self.processName, command))                     # Adds prompt to log
+            utils.dbgLogFileWrite("\n[%s]> %s" % (self.processName, command))                   # Adds prompt to log
         if command == '':                                                                       # If nothing is entered
             return
         elif command.split()[0] == 'set' or command.split()[0] == 's':                          # s or set
@@ -150,6 +152,8 @@ class Parser:
         elif command.split()[0] == 'd' or command.split()[0] == "detach":                       # d or detach
             dbg.detach()
             self.processName = dbg.processName
+        elif command.split()[0] == 'wa' or command.split()[0] == "write_adr":                       # d or detach
+            dbg.writeMemory(command)
         elif command.split()[0] == 'fr' or command.split()[0] == "resolve":                     # fr or resolve
             if len(command.split()) < 3:
                 utils.dbgPrint("\n[-] Improper arguments. See help with ?.\n", Fore.RED)
@@ -172,7 +176,7 @@ class Parser:
                 return
         elif command.split()[0] == 'dc' or command.split()[0] == "dump_context":                 # dc or dump_context
             dbg.dumpContext()
-        elif command.split()[0] == 'sr' or command.split()[0] == "set_reg":                 # sr or set_register
+        elif command.split()[0] == 'sr' or command.split()[0] == "set_reg":                      # sr or set_register
             if len(command.split()) < 3:
                 utils.dbgPrint("[-] Not enough args supplied.")
                 return False
@@ -192,14 +196,14 @@ class Parser:
 
     def printParse(self, command):
         command = command.split()
-        if command[0] == 'pv' or command[0] == 'print_var':                          # Print variable
+        if command[0] == 'pv' or command[0] == 'print_var':                                     # Print variable
             input = command[1].lower()
             variable = self.checkVariable(input)
             if variable is not None:
-                utils.dbgPrint("\n[*] %s = %s\n" % (input, variable))
+                utils.dbgPrint("\n[*] %s = " % input, Fore.GREEN, dualline=True, secondline="%s\n" % variable)
             else:
                 utils.dbgPrint("\n[-] Invalid variable name.\n", Fore.RED)
-        elif command[0] == 'pr' or command[0] == 'print_register':                  # Print register
+        elif command[0] == 'pr' or command[0] == 'print_register':                              # Print register
             if len(command) is 1:
                 dbg.dumpRegisters()
             elif len(command) == 2:
@@ -218,6 +222,12 @@ class Parser:
                     return False
                 hexRegister = "%08x" % value
                 utils.dbgPrint("\n[*] (Thread: %d) %s: 0x%08x, - Decimal: %d, ASCII: %s" % (thread, register, value, value, hexRegister.strip().decode("hex)")), Fore.GREEN)
+        elif command[0] == "pa" or command[0] == "print_adr":                                # Print memory
+            address = command[1]
+            length = command[2]
+            dbg.readMemory(address, length)
+        else:
+            utils.dbgPrint("[-] Print parser error.", Fore.RED)
 
     def breakpointParse(self, command):
         command = command.split()

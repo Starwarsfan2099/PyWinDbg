@@ -29,24 +29,24 @@ class Utilities:
         Utilities.__instance = self
 
     # Our print function for coloring output and saving lines to the log
-    def dbgPrint(self, output, attribute=None, inputLine=False, verbose=True, dualline=False, secondline=""):
+    def dbgPrint(self, output, attribute=None, inputLine=False, verbose=True, secondLine=None):
         if verbose is not False:
             if attribute is None:
                 line = output
             else:
-                if dualline is False:
+                if secondLine is None:
                     line = '\033[1m' + attribute + output
                 else:
-                    line = '\033[1m' + attribute + output + '\033[1m' + Style.RESET_ALL + secondline
+                    line = '\033[1m' + attribute + output + '\033[1m' + Style.RESET_ALL + secondLine
             if inputLine is not False:
                 return line
             else:
                 print line
                 if self.logging is True:
-                    if dualline is False:
+                    if secondLine is None:
                         self.dbgLogFileWrite(output)
                     else:
-                        self.dbgLogFileWrite(output + secondline)
+                        self.dbgLogFileWrite(output + secondLine)
 
     # File logging functions
     def dbgLogFileWrite(self, line):

@@ -349,7 +349,7 @@ class Parser:
         else:
             utils.dbgPrint("\n[-] Incorrect variable name given\n", Fore.RED)
             return
-        utils.dbgPrint("\n%s = %s\n" % (input, str(self.variables[input])), verbose=self.debug)
+        utils.dbgPrint("\n[DEBUG] %s = %s\n" % (input, str(self.variables[input])), verbose=self.debug)
         return True
 
     def attach(self, pid):

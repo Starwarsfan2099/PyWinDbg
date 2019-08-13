@@ -99,6 +99,8 @@ To set a breakpoint, a function address can be resolved with `function_resolve F
 Or it can be automatically set with `break_funk FUNCTION LIBRARY` (`bf`).
 When a breakpoint is hit, the prompt will return so commands can be run.
 
+`Note: Images may be different from the current versions output due to updates and changes.`
+
 ## When a breakpoint is hit
 ![Printing registers](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/print_registers.png)
 `print_reg` or `pr` will print all registers. 
@@ -191,7 +193,7 @@ Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use my local install 
 ## TODO
 
 - ~~Add memory reading/writing.~~
-- Print register and contents in different formats.
+- ~~Print register and contents in different formats.~~
 - Add shellcode injection.
 - Dump SEH after breakpoint is hit.
 - Memory and hardware breakpoints.

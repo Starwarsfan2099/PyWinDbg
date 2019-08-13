@@ -93,14 +93,14 @@ class debugger:
         if searchName is None:
             for (pid, name) in self.dbg.enumerate_processes():
                 if pid != os.getpid():
-                    utils.dbgPrint("[+] Name: ", Fore.GREEN, dualline=True, secondline="%s PID:%s" % (name, pid))
+                    utils.dbgPrint("[+] Name: ", Fore.GREEN, secondLine="%s PID:%s" % (name, pid))
                 else:
                     utils.dbgPrint("[+] Name: %s PID:%s     <==[Current Debugger Process] " % (name, pid), Fore.GREEN)
         else:
             for (pid, name) in self.dbg.enumerate_processes():
                 if searchName.lower() in name.lower() or searchName in str(pid):
                     if pid != os.getpid():
-                        utils.dbgPrint("[+] Name: ", Fore.GREEN, dualline=True, secondline="%s PID:%s" % (name, pid))
+                        utils.dbgPrint("[+] Name: ", Fore.GREEN, secondLine="%s PID:%s" % (name, pid))
                     else:
                         utils.dbgPrint("[+] Name: %s PID:%s     <==[Current Debugger Process] " % (name, pid), Fore.GREEN)
         utils.dbgPrint("")
@@ -115,19 +115,19 @@ class debugger:
         except psutil.AccessDenied:
             utils.dbgPrint("\n[-] Process with a PID of %d could not be accesses.\n" % pid, Fore.RED)
             return False
-        utils.dbgPrint("\n[*] Name: ", Fore.GREEN, dualline=True, secondline="%s" % p.name())
-        utils.dbgPrint("[*] Executable path: ", Fore.GREEN, dualline=True, secondline="%s" % p.exe())
-        utils.dbgPrint("[*] Working directory: ", Fore.GREEN, dualline=True, secondline="%s" % p.cwd())
+        utils.dbgPrint("\n[*] Name: ", Fore.GREEN, secondLine="%s" % p.name())
+        utils.dbgPrint("[*] Executable path: ", Fore.GREEN, secondLine="%s" % p.exe())
+        utils.dbgPrint("[*] Working directory: ", Fore.GREEN, secondLine="%s" % p.cwd())
         command = ""
         for item in p.cmdline():
             command = command + item + " "
-        utils.dbgPrint("[*] Command line: ", Fore.GREEN, dualline=True, secondline="\"%s\"" % command.strip())
-        utils.dbgPrint("[*] Process: ", Fore.GREEN, dualline=True, secondline="%d" % p.pid)
-        utils.dbgPrint("[*] Parent PID: ", Fore.GREEN, dualline=True, secondline="%d" % p.ppid())
-        utils.dbgPrint("[*] Status: ", Fore.GREEN, dualline=True, secondline="%s" % p.status())
-        utils.dbgPrint("[*] Username: ", Fore.GREEN, dualline=True, secondline="%s" % p.username())
-        utils.dbgPrint("[*] Process creation time: ", Fore.GREEN, dualline=True, secondline="%f" % p.create_time())
-        utils.dbgPrint("[*] Threads: ", Fore.GREEN, dualline=True, secondline="%d\n" % p.num_threads())
+        utils.dbgPrint("[*] Command line: ", Fore.GREEN, secondLine="\"%s\"" % command.strip())
+        utils.dbgPrint("[*] Process: ", Fore.GREEN, secondLine="%d" % p.pid)
+        utils.dbgPrint("[*] Parent PID: ", Fore.GREEN, secondLine="%d" % p.ppid())
+        utils.dbgPrint("[*] Status: ", Fore.GREEN, secondLine="%s" % p.status())
+        utils.dbgPrint("[*] Username: ", Fore.GREEN, secondLine="%s" % p.username())
+        utils.dbgPrint("[*] Process creation time: ", Fore.GREEN, secondLine="%f" % p.create_time())
+        utils.dbgPrint("[*] Threads: ", Fore.GREEN, secondLine="%d\n" % p.num_threads())
 
     def parseBinaryInfo(self, info):
         for line in info.split("\n"):
@@ -232,8 +232,8 @@ class debugger:
         address = int(address, 0)
         value = self.dbg.read_process_memory(address, int(length))
         hexValue= utils.toHex(value)
-        utils.dbgPrint("\n[*] Value: ", Fore.GREEN, dualline=True, secondline="%s\n" % value)
-        utils.dbgPrint("\n[*] Hex: ", Fore.GREEN, dualline=True, secondline="%s\n" % hexValue)
+        utils.dbgPrint("\n[*] Value: ", Fore.GREEN, secondLine="%s\n" % value)
+        utils.dbgPrint("\n[*] Hex: ", Fore.GREEN, secondLine="%s\n" % hexValue)
         return True
 
     def writeMemory(self, command):
@@ -248,7 +248,7 @@ class debugger:
         try:
             address = self.dbg.func_resolve_debuggee(library, function)
         except Exception as e:
-            utils.dbgPrint("\n[-] Got error: %s\n" % e, Fore.RED, verbose=self.debug)
+            utils.dbgPrint("\n[DEBUG] Got error: %s\n" % e, Fore.RED, verbose=self.debug)
             utils.dbgPrint("\n[-] Error reading memory, is debugger attached to a process?\n", Fore.RED)
             return False
         if address == 0:
@@ -558,7 +558,7 @@ class debugger:
             return DBG_EXCEPTION_NOT_HANDLED
 
         self.dbg.set_callback(EXCEPTION_ACCESS_VIOLATION, check_accessv)
-        utils.dbgPrint("\n[*] Crash mode hooks in place.\n", Fore.GREEN, verbose=self.verbose)
+        utils.dbgPrint("\n[+] Crash mode hooks in place.\n", Fore.GREEN, verbose=self.verbose)
 
     def disableCrashMode(self):
         def doNothing(dbg):
@@ -685,13 +685,13 @@ class debugger:
                 pid = new_process.ProcessId
                 parent_pid = new_process.ParentProcessId
                 privileges = self.getProcessPrivilages(pid)
-                utils.dbgPrint("\nDate: ", Fore.GREEN, dualline=True, secondline="%s" % create_date)
-                utils.dbgPrint("Process Owners: ", Fore.GREEN, dualline=True, secondline="%s" % proc_owner)
-                utils.dbgPrint("Executable: ", Fore.GREEN, dualline=True, secondline="%s" % executable)
-                utils.dbgPrint("Command line: ", Fore.GREEN, dualline=True, secondline="%s" % cmdline)
-                utils.dbgPrint("PID: ", Fore.GREEN, dualline=True, secondline="%s" % pid)
-                utils.dbgPrint("Parent PID: ", Fore.GREEN, dualline=True, secondline="%s" % parent_pid)
-                utils.dbgPrint("Privileges: ", Fore.GREEN, dualline=True, secondline="%s\n" % privileges)
+                utils.dbgPrint("\nDate: ", Fore.GREEN, secondLine="%s" % create_date)
+                utils.dbgPrint("Process Owners: ", Fore.GREEN, secondLine="%s" % proc_owner)
+                utils.dbgPrint("Executable: ", Fore.GREEN, secondLine="%s" % executable)
+                utils.dbgPrint("Command line: ", Fore.GREEN, secondLine="%s" % cmdline)
+                utils.dbgPrint("PID: ", Fore.GREEN, secondLine="%s" % pid)
+                utils.dbgPrint("Parent PID: ", Fore.GREEN, secondLine="%s" % parent_pid)
+                utils.dbgPrint("Privileges: ", Fore.GREEN, secondLine="%s\n" % privileges)
         except KeyboardInterrupt:
             utils.dbgPrint("\n[-] Exited process monitor.\n", Fore.RED)
             return False
@@ -778,7 +778,7 @@ class debugger:
                         utils.dbgPrint("\n[-] Deleted %s" % full_filename, Fore.RED)
                     elif action == FILE_MODIFIED:
                         utils.dbgPrint("\n[*] Modified %s" % full_filename, Fore.YELLOW)
-                        utils.dbgPrint("\n[*] Dumping contents...", Fore.GREEN, verbose=self.verbose)
+                        utils.dbgPrint("\n[+] Dumping contents...", Fore.GREEN, verbose=self.verbose)
                         try:
                             fd = open(full_filename, "rb")
                             contents = fd.read()

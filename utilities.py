@@ -28,7 +28,7 @@ class Utilities:
         self.log = None
         Utilities.__instance = self
 
-    # Our print function for coloring output and saving lines to the log
+    # Print function for coloring output, saving lines to the log, and formatting options.
     def dbgPrint(self, output, attribute=None, inputLine=False, verbose=True, secondLine=None):
         if verbose is not False:
             if attribute is None:
@@ -60,6 +60,7 @@ class Utilities:
         self.log = open(fileName, "w+")
         self.log.write("PyWinDbg\nBy Starwarsfan2099\nLog file:\n")
 
+    # String to hex string
     def toHex(self, s):
         lst = []
         for ch in s:
@@ -70,6 +71,6 @@ class Utilities:
 
         return reduce(lambda x, y: x + y, lst)
 
-    # convert hex repr to string
+    # Convert hex repr to string
     def toStr(self, s):
         return s and chr(atoi(s[:2], base=16)) + toStr(s[2:]) or ''

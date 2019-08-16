@@ -27,19 +27,19 @@ class Parser:
 
     def __init__(self):
         Parser.__instance = self
-        self.processName = "pywindbg"
-        self.fileMode = False
-        self.debug = False
-        self.variables = {
-            "executable": False,
-            "verbose": False,
-            "debug": False,
-            "crash-mode": False,
-            "file-mode": False,
-            "logging": False,
-            "logfile": "log-%s.txt" % currentTime.strftime("%Y-%m-%d-%H-%M"),
-            "pid": 0,
-            "hide-debugger": False
+        self.processName = "pywindbg"                                                       # Currently debugged process, 'pywindbg' to start out with
+        self.fileMode = False                                                               # Debugger set to file mode
+        self.debug = False                                                                  # Debug mode for debugging output
+        self.variables = {                                                                  # Variables that can be set from the command line of the debugger
+            "executable": False,                                                            # Executable to open and run
+            "verbose": False,                                                               # Verbose mode
+            "debug": False,                                                                 # Debug mode
+            "crash-mode": False,                                                            # Crash mode
+            "file-mode": False,                                                             # File hooking mode
+            "logging": False,                                                               # Enable logging
+            "logfile": "log-%s.txt" % currentTime.strftime("%Y-%m-%d-%H-%M"),               # Logfile to write to
+            "pid": 0,                                                                       # PID to debug
+            "hide-debugger": False                                                          # Enable hiding the debugger
         }
 
     def seeHelp(self):
@@ -66,7 +66,8 @@ class Parser:
         utils.dbgPrint(" dc | dump_context                  Returns current EIP disassembled and stack unwind.")
         utils.dbgPrint(" di | dump_info EXE|DLL|PID         Return information on PID, or debugging EXE, or supplied DLL.")
         utils.dbgPrint(" sr | set_reg REG VAL ID            Sets register REG to VAL in thread ID, all threads if no ID is specified.")
-        utils.dbgPrint(" id | inject_dll PID DLL            Injects DLL into Process PID.")
+        utils.dbgPrint(" id | inject_dll PID DLL            Injects DLL into process PID.")
+        utils.dbgPrint(" is | inject_shellcode PID          Injects sellcode from the shellcode.py file into process PID.")
         utils.dbgPrint(" wa | write_adr ADD LEN DATA        Writes data to an address.")
 
         utils.dbgPrint("\n")
@@ -109,6 +110,7 @@ class Parser:
         # utils.dbgPrint(" bm | break_mem ADDRESS             Sets a memory breakpoint at address.")
         utils.dbgPrint("\n")
 
+    # Main function that takes a command and determines if it is an allowed command and executes the necessary functions
     def runCommand(self, command):
         if self.variables["logging"] is True:
             utils.dbgLogFileWrite("\n[%s]> %s" % (self.processName, command))                   # Adds prompt to log
@@ -152,7 +154,7 @@ class Parser:
         elif command.split()[0] == 'd' or command.split()[0] == "detach":                       # d or detach
             dbg.detach()
             self.processName = dbg.processName
-        elif command.split()[0] == 'wa' or command.split()[0] == "write_adr":                       # d or detach
+        elif command.split()[0] == 'wa' or command.split()[0] == "write_adr":                   # wa or write_adr
             dbg.writeMemory(command)
         elif command.split()[0] == 'fr' or command.split()[0] == "resolve":                     # fr or resolve
             if len(command.split()) < 3:
@@ -189,11 +191,17 @@ class Parser:
                 utils.dbgPrint("\n[-] Improper args supplied.", Fore.RED)
                 return False
             dbg.dllInject(int(command.split()[1]), command.split()[2])
+        elif command.split()[0] == 'is' or command.split()[0] == "inject_shellcode":             # is or inject_shellcode
+            if len(command.split()) != 2:
+                utils.dbgPrint("\n[-] Improper args supplied.", Fore.RED)
+                return False
+            dbg.shellcodeInject(int(command.split()[1]))
         elif command.split()[0] == 'di' or command.split()[0] == "dump_info":                    # di or dump_info
             dbg.dumpInfo(command)
         else:
             self.seeHelp()
 
+    # Parse commands that begin with 'p' or 'print'
     def printParse(self, command):
         command = command.split()
         if command[0] == 'pv' or command[0] == 'print_var':                                     # Print variable
@@ -229,6 +237,7 @@ class Parser:
         else:
             utils.dbgPrint("[-] Print parser error.", Fore.RED)
 
+    # Parse commands starting with 'b' or 'break' for breakpoint commands
     def breakpointParse(self, command):
         command = command.split()
         if command[0] == "b" or command[0] == "break":
@@ -244,12 +253,14 @@ class Parser:
             dbg.softBreakpointSetFunction(command[1], command[2], self.breakpointCommandHandler)
             return True
 
+    # Handler for when a breakpoint is hit
     def breakpointCommandHandler(self, dbgInstance):
         status = None
         while status != DBG_CONTINUE:
             status = self.runCommand(raw_input(utils.dbgPrint("\n[%s]> " % self.processName, Fore.GREEN, inputLine=True)))
         return DBG_CONTINUE
 
+    # Check if a variable the user provides is a variable that can be set from the debugger command line
     def checkVariable(self, variable):
         if variable in self.variables.keys():
             output = self.variables[variable]
@@ -257,6 +268,7 @@ class Parser:
             output = None
         return output
 
+    # Parse 's' or 'set' for setting variable and performing the necessary action.
     def variableParse(self, command):
         command = command.split()
         if len(command) < 3:
@@ -352,6 +364,8 @@ class Parser:
         utils.dbgPrint("\n[DEBUG] %s = %s\n" % (input, str(self.variables[input])), verbose=self.debug)
         return True
 
+    # Check if a PID is valid and attach to it
+    # TODO move checks to debegger.py
     def attach(self, pid):
         if not isinstance(int(pid), (int, long)):
             utils.dbgPrint("\n[-] Invalid PID given\n", Fore.RED)
@@ -361,12 +375,14 @@ class Parser:
         dbg.attachPID(int(pid))
         return True
 
+    # Open an executable
     def openAndAttach(self, path):
         utils.dbgPrint("\n[*] Opening %s\n" % path, Fore.GREEN)
         self.processName = path.split("\\")[-1]
         dbg.loadExecutable(path, self.processName)
         return True
 
+    # Start the tools
     def startProcessMonitor(self):
         utils.dbgPrint("\n[*] Starting process monitor...", Fore.GREEN)
         utils.dbgPrint("\n[*] Press Ctrl-C once and wait a few seconds to kill the process monitor...", Fore.GREEN)

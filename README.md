@@ -127,6 +127,10 @@ Enabled with `set file-mode true` or from the command line options with `-f`.
 `inject_dll PID DLL` (`id`) will attempt to inject the specified dll into the specified process PID.
 You must have proper privileges and be injecting to a same bit process.
 
+## Shellcode injection
+`inject_shellcod PID` or `is PID` will inject the shellcode from shellcode.py stored in the variable `shellcode`
+By default the shellcode is a simple Windows message box.
+
 ## Writing and Reading memory
 Reading memory can be performed with `pa ADDRESS LENGTH` or `print_adr`.
 Writing memory can be done with `write_adr ADDRESS LENGTH DATA` (`wa`).
@@ -194,7 +198,7 @@ Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use my local install 
 
 - ~~Add memory reading/writing.~~
 - ~~Print register and contents in different formats.~~
-- Add shellcode injection.
+- ~~Add shellcode injection.~~
 - Dump SEH after breakpoint is hit.
 - Memory and hardware breakpoints.
 

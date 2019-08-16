@@ -9,6 +9,7 @@ from pydbg.defines import *
 from colorama import Fore
 import pefile
 import os
+import sys
 import struct
 import psutil
 import win32con
@@ -255,8 +256,14 @@ class debugger:
             utils.dbgPrint("\n[-] %s not found in %s.dll or the dll was not found.\n" % (function, library), Fore.RED)
             return False
         else:
-            utils.dbgPrint("\n[*] %s, %s.dll: 0x%08x - Breakpoint address: %s\n" % (function, library.strip(".dll"), address, address), Fore.GREEN)
-            return address
+            utils.dbgPrint("\n[DEBUG] Function: %s DLL: %s" % (function, library), Fore.GREEN, verbose=self.debug)
+            utils.dbgPrint("[DEBUG] Address: %s\n" % address, Fore.GREEN, verbose=self.debug)
+            if address is None:
+                utils.dbgPrint("\n[-] Error resolving function %s\n" % function, Fore.RED)
+                return False
+            else:
+                utils.dbgPrint("\n[*] %s, %s.dll: 0x%08x - Breakpoint address: %s\n" % (function, library.strip(".dll"), address, address), Fore.GREEN)
+                return address
 
     def softBreakpointSet(self, address):
 
@@ -646,6 +653,32 @@ class debugger:
         utils.dbgPrint("[+] Remote Thread with ID 0x%08x created.\n" % (thread_id.value), Fore.GREEN)
         error = kernel32.GetLastError()
         utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+        return True
+
+    def shellcodeInject(self, pid):
+        try:
+            from shellcode import shellcode
+        except ImportError:
+            utils.dbgPrint("\n[-] Unable to find shellcode.py file or import shellcode from the file.\n", Fore.RED)
+            return False
+
+        process_handle = windll.kernel32.OpenProcess(0x1F0FFF, False, pid)
+
+        if not process_handle:
+            utils.dbgPrint("\n[-] Couldn't get a handle to PID: %s\n" % pid, Fore.RED)
+            return False
+
+        memory_allocation_variable = windll.kernel32.VirtualAllocEx(process_handle, 0, len(shellcode), 0x00001000, 0x40)
+
+        utils.dbgPrint("\n[+] Address of allocated shellcode space: 0x%08x" % memory_allocation_variable, Fore.GREEN, verbose=self.verbose)
+
+        windll.kernel32.WriteProcessMemory(process_handle, memory_allocation_variable, shellcode, len(shellcode), 0)
+
+        if not windll.kernel32.CreateRemoteThread(process_handle, None, 0, memory_allocation_variable, 0, 0, 0):
+            utils.dbgPrint("[-] Failed to inject shellcode. Exiting.", Fore.RED)
+            return False
+
+        utils.dbgPrint("\n[+] Shellcode injected.\n", Fore.GREEN)
         return True
 
     def getProcessPrivilages(self, pid):

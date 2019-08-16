@@ -173,7 +173,7 @@ class pydbg:
 
     def setDebug(self, debug):
         # utils.dbgPrint("[*] Debug engine set to display debug messages", Fore.GREEN)
-        self.debug = True
+        self.debug = debug
         return True
 
     def setHidden(self, hidden):
@@ -1567,7 +1567,7 @@ class pydbg:
                 if self.first_breakpoint:
                     utils.dbgPrint("[*] First windows driven system breakpoint at %08x" % self.exception_address, Fore.GREEN, verbose=self.verbose)
                     self.first_breakpoint = False
-                    utils.dbgPrint("[*] currentlyHidden: %s, hidden: %s" % (self.currentlyHidden, self.hidden), Fore.GREEN, verbose=self.debug)
+                    utils.dbgPrint("[DEBUG] currentlyHidden: %s, hidden: %s" % (self.currentlyHidden, self.hidden), Fore.GREEN, verbose=self.debug)
                     if self.currentlyHidden is False and self.hidden is True:
                         utils.dbgPrint("[*] Attempting to hide debugger from default windows breakpoint...", Fore.GREEN)
                         self.hide_debugger()
@@ -1594,7 +1594,7 @@ class pydbg:
             if self.breakpoints[self.exception_address].handler:
                 utils.dbgPrint("[*] Calling handler...", Fore.GREEN, verbose=self.verbose)
                 utils.dbgPrint("\n[+] Hit breakpoint on %s at 0x%08x\n" % (self.breakpoints[self.exception_address].description, self.exception_address), Fore.GREEN)
-                utils.dbgPrint("[*] currentlyHidden: %s, hidden: %s" % (self.currentlyHidden, self.hidden), Fore.GREEN, verbose=self.debug)
+                utils.dbgPrint("[DEBUG] currentlyHidden: %s, hidden: %s" % (self.currentlyHidden, self.hidden), Fore.GREEN, verbose=self.debug)
                 if self.currentlyHidden is False and self.hidden is True:
                     self.hide_debugger()
                     self.currentlyHidden = True
@@ -1855,7 +1855,7 @@ class pydbg:
 
                     # we use a crude approach here. read 256 bytes and cut on NULL char. not very beautiful, but reading
                     # 1 byte at a time is very slow.
-                    utils.dbgPrint("Read address: 0x%08x" % current_address, Fore.GREEN, verbose=self.debug)
+                    utils.dbgPrint("[DEBUG] Read address: 0x%08x" % current_address, Fore.GREEN, verbose=self.debug)
                     name_buffer = self.read_process_memory(current_address, 256)
                     name_buffer = name_buffer[:name_buffer.find("\0")]
 

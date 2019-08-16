@@ -192,6 +192,8 @@ If an executable or DLL is passed, it will dump the headers, sections, architect
 
 `bufferOverflow.py`: Source for the compiled `bufferOverflow.exe` file included.
 
+`shellcode.py`: File that PyWinDbg imports shellcode from for injection into a process.
+
 Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use my local install of upx, you'll probably have to change the path or remove the upx option.
 
 ## TODO

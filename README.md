@@ -32,7 +32,8 @@ by Starwarsfan2099
  dc | dump_context                  Returns current EIP disassembled and stack unwind.
  di | dump_info EXE|DLL|PID         Return information on PID, or debugging EXE, or supplied DLL.
  sr | set_reg REG VAL ID            Sets register REG to VAL in thread ID, all threads if no ID is specified.
- id | inject_dll PID DLL            Injects DLL into Process PID.
+ id | inject_dll PID DLL            Injects DLL into process PID.
+ is | inject_shellcode PID          Injects sellcode from the shellcode.py file into process PID.
  wa | write_adr ADD LEN DATA        Writes data to an address.
 
 

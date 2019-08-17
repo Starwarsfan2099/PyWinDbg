@@ -7,7 +7,7 @@ It currently supports loading an executable, attaching to a process, setting bre
 
 ````
 PyWinDbg
-Version 0.1
+Version 0.8
 by Starwarsfan2099
 
 
@@ -60,7 +60,7 @@ hide-debugger | True|False          Hide the debugger after first breakpoint.
 ## Command line options:
 ````
 PyWinDbg
-Version 0.1
+Version 0.8
 by Starwarsfan2099
 
 usage: pywindbg.py [-h] [-p PID] [-o OPEN] [-l LOG] [-v] [-d] [-x] [-c] [-f]

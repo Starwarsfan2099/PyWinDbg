@@ -67,7 +67,7 @@ class Utilities:
             hv = hex(ord(ch)).replace('0x', '')
             if len(hv) == 1:
                 hv = '0' + hv
-            lst.append(hv)
+            lst.append("\\x" + hv)
 
         return reduce(lambda x, y: x + y, lst)
 

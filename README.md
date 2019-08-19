@@ -129,6 +129,7 @@ Enabled with `set file-mode true` or from the command line options with `-f`.
 You must have proper privileges and be injecting to a same bit process.
 
 ## Shellcode injection
+![Shellcode injection](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/shellcode_inject.png)
 `inject_shellcod PID` or `is PID` will inject the shellcode from shellcode.py stored in the variable `shellcode`
 By default the shellcode is a simple Windows message box.
 

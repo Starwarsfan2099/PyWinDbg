@@ -662,6 +662,7 @@ class debugger:
             utils.dbgPrint("\n[-] Unable to find shellcode.py file or import shellcode from the file.\n", Fore.RED)
             return False
 
+        utils.dbgPrint("\n[+] Shellcode: %s\n" % utils.toHex(shellcode), Fore.GREEN, verbose=self.verbose)
         process_handle = windll.kernel32.OpenProcess(0x1F0FFF, False, pid)
 
         if not process_handle:

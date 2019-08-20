@@ -262,7 +262,7 @@ class debugger:
                 utils.dbgPrint("\n[-] Error resolving function %s\n" % function, Fore.RED)
                 return False
             else:
-                utils.dbgPrint("\n[*] %s, %s.dll: 0x%08x - Breakpoint address: %s\n" % (function, library.strip(".dll"), address, address), Fore.GREEN)
+                utils.dbgPrint("\n[*] %s, %s.dll: 0x%08x\n" % (function, library.strip(".dll"), address), Fore.GREEN)
                 return address
 
     def softBreakpointSet(self, address):

@@ -71,6 +71,8 @@ class Parser:
         utils.dbgPrint(" wa | write_adr ADD LEN DATA        Writes data to an address.")
         utils.dbgPrint(" su | seh_unwind                    Dump the top of the SEH handler.")
         utils.dbgPrint(" tu | stack_unwind                  Dump the top of the stack.")
+        utils.dbgPrint(" sc | snapshot_create               Create a process snapshot.")
+        utils.dbgPrint(" sr | snapshot_restore              Restore the processes snapshot.")
 
         utils.dbgPrint("\n")
 
@@ -194,6 +196,10 @@ class Parser:
             dbg.dumpSEH()
         elif splitCommand[0] == 'dt' or splitCommand[0] == "dump_stack":                   # dt or dump_stack
             dbg.dumpStack()
+        elif splitCommand[0] == 'sc' or splitCommand[0] == "snapshot_create":              # sc or snapshot_create
+            dbg.createSnapshot()
+        elif splitCommand[0] == 'sr' or splitCommand[0] == "snapshot_restore":             # sr or snapshot_restore
+            dbg.restoreSnapshot()
         elif splitCommand[0] == 'sr' or splitCommand[0] == "set_reg":                      # sr or set_register
             if len(splitCommand) < 3:
                 utils.dbgPrint("[-] Not enough args supplied.")

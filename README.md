@@ -146,6 +146,11 @@ Writing memory can be done with `write_adr ADDRESS LENGTH DATA` (`wa`).
 Dumping SEH can be performed with `dump_seh` (`ds`).
 And dump the stack with `sump_stack` (`dt`).
 
+## Process snapshotting
+![Process snapshot](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/snapshot.PNG)
+Create a process snapshot with `snapshot_create` (`sc`).
+Restore that snapshot with `snapshot_restore` (`sr`).
+
 ## Tools
 ### File monitor
 ![File monitoring mode](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/file_monitor.png)

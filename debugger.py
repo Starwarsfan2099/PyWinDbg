@@ -89,6 +89,16 @@ class debugger:
         utils.dbgPrint("\n[*] Debugger will  no longer be hidden.\n", Fore.GREEN)
         self.dbg.setHiddden(False)
 
+    def createSnapshot(self):
+        self.dbg.process_snapshot()
+        utils.dbgPrint("\n[+] Created snapshot of process.", Fore.GREEN)
+        return True
+
+    def restoreSnapshot(self):
+        self.dbg.process_restore()
+        utils.dbgPrint("\n[+] Restored snapshot of process.", Fore.GREEN)
+        return True
+
     def processList(self, searchName=None):
         utils.dbgPrint("\n[+] Getting Process List...\n", Fore.GREEN)
         if searchName is None:

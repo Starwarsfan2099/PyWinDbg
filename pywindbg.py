@@ -6,7 +6,7 @@ import utilities
 import commandParse
 from colorama import Fore
 
-version = "0.8"
+version = "0.9"
 utils = utilities.Utilities()
 
 utils.dbgPrint("", Fore.GREEN)

@@ -21,11 +21,11 @@ by Starwarsfan2099
  ?  | help                          This help menu.
 
 
- a  | attach PID                    Attach to a process ID.
+ a  | attach PID                    Attach to a process ID, or to the PID variable if set.
  d  | detach                        Detach from a process.
  l  | list NAME|PID                 List current PID's, or search one by name or PID.
- o  | open EXE                      Launch and attach to an executable.
- r  | run ARGS                      Starts the opened process with args.
+ o  | open EXE                      Launch and attach to an executable, or the executable set in the EXECUTABLE variable.
+ r  | run ARGS                      Starts the opened or attached process with args.
  c  | continue                      Continue execution after hitting a breakpoint.
  b* | set breakpoints               Setting breakpoints. Use ?b for more help.
  fr | resolve FUNC LIB              Returns the address for a function from a dll.
@@ -35,6 +35,8 @@ by Starwarsfan2099
  id | inject_dll PID DLL            Injects DLL into process PID.
  is | inject_shellcode PID          Injects sellcode from the shellcode.py file into process PID.
  wa | write_adr ADD LEN DATA        Writes data to an address.
+ su | seh_unwind                    Dump the top of the SEH handler.
+ tu | stack_unwind                  Dump the top of the stack.
 
 
 Tools:
@@ -43,6 +45,8 @@ Tools:
 
 
  Variables:
+          pid | PID                 Set a pid to attach to.
+   executable | PATH                Set the path for an executable to be launched and attached to.
       verbose | True|False          Enables more output.
       debug   | True|False          Enables debugging output for development and bug hunting.
       logging | True|False          Enable logging to FILE.

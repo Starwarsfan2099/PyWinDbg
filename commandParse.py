@@ -190,9 +190,9 @@ class Parser:
                 return False
         elif splitCommand[0] == 'dc' or splitCommand[0] == "dump_context":                 # dc or dump_context
             dbg.dumpContext()
-        elif splitCommand[0] == 'su' or splitCommand[0] == "seh_unwind":                   # su or seh_unwind
+        elif splitCommand[0] == 'ds' or splitCommand[0] == "dump_seh":                     # ds or dump_seh
             dbg.dumpSEH()
-        elif splitCommand[0] == 'tu' or splitCommand[0] == "stack_unwind":                 # tu or stack_unwind
+        elif splitCommand[0] == 'dt' or splitCommand[0] == "dump_stack":                   # dt or dump_stack
             dbg.dumpStack()
         elif splitCommand[0] == 'sr' or splitCommand[0] == "set_reg":                      # sr or set_register
             if len(splitCommand) < 3:

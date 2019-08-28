@@ -141,6 +141,10 @@ By default the shellcode is a simple Windows message box.
 Reading memory can be performed with `pa ADDRESS LENGTH` or `print_adr`.
 Writing memory can be done with `write_adr ADDRESS LENGTH DATA` (`wa`).
 
+## Dump SEH and Stack info
+![Dump SEH and stack](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/dump_seh_stack.PNG)
+Dumping SEH can be performed with `dump_seh` (`ds`).
+And dump the stack with `sump_stack` (`dt`).
 
 ## Tools
 ### File monitor

@@ -7,7 +7,7 @@ It currently supports loading an executable, attaching to a process, setting bre
 
 ````
 PyWinDbg
-Version 0.8
+Version 0.9
 by Starwarsfan2099
 
 
@@ -37,6 +37,8 @@ by Starwarsfan2099
  wa | write_adr ADD LEN DATA        Writes data to an address.
  su | seh_unwind                    Dump the top of the SEH handler.
  tu | stack_unwind                  Dump the top of the stack.
+ sc | snapshot_create               Create a process snapshot.
+ sr | snapshot_restore              Restore the processes snapshot.
 
 
 Tools:

@@ -295,6 +295,53 @@ class debugger:
                 utils.dbgPrint(line, Fore.GREEN)
         return True
 
+    def dumpSEH(self):
+        output = ""
+        seh_unwind = self.dbg.seh_unwind()
+        utils.dbgPrint("[DEBUG]: SEH: %s" % seh_unwind, Fore.GREEN, verbose=self.debug)
+        for i in xrange(len(seh_unwind)):
+            (addr, handler) = seh_unwind[i]
+
+            module = self.dbg.addr_to_module(handler)
+
+            if module:
+                module = module.szModule
+            else:
+                module = "[INVALID]"
+
+            seh_unwind[i] = (addr, handler, "%s:%08x" % (module, handler))
+
+        if len(seh_unwind):
+            output += "\nSEH unwind:\n"
+            for (addr, handler, handler_str) in seh_unwind:
+                output += "%08x -> %s\n" % (addr, handler_str)
+
+        utils.dbgPrint(output + "\n", Fore.GREEN)
+        return True
+
+    def dumpStack(self):
+        output = ""
+        stack_unwind = self.dbg.stack_unwind()
+        utils.dbgPrint("[DEBUG]: Stack: %s" % stack_unwind, Fore.GREEN, verbose=self.debug)
+        for i in xrange(len(stack_unwind)):
+            addr   = stack_unwind[i]
+            module = self.dbg.addr_to_module(addr)
+
+            if module:
+                module = module.szModule
+            else:
+                module = "[INVALID]"
+
+            stack_unwind[i] = "%s:%08x" % (module, addr)
+
+        if len(stack_unwind):
+            output += "\nStack unwind:\n"
+            for entry in stack_unwind:
+                output += "%s\n" % entry
+
+        utils.dbgPrint(output + "\n", utilities.stack_color)
+        return True
+
     def dumpRegisters(self):
         for thread_id in self.dbg.enumerate_threads():
             thread_handle = self.dbg.open_thread(thread_id)

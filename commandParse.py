@@ -55,11 +55,11 @@ class Parser:
 
         utils.dbgPrint("\n")
 
-        utils.dbgPrint(" a  | attach PID                    Attach to a process ID.")
+        utils.dbgPrint(" a  | attach PID                    Attach to a process ID, or to the PID variable if set.")
         utils.dbgPrint(" d  | detach                        Detach from a process.")
         utils.dbgPrint(" l  | list NAME|PID                 List current PID's, or search one by name or PID.")
-        utils.dbgPrint(" o  | open EXE                      Launch and attach to an executable.")
-        utils.dbgPrint(" r  | run ARGS                      Starts the opened process with args.")
+        utils.dbgPrint(" o  | open EXE                      Launch and attach to an executable, or the executable set in the EXECUTABLE variable.")
+        utils.dbgPrint(" r  | run ARGS                      Starts the opened or attached process with args.")
         utils.dbgPrint(" c  | continue                      Continue execution after hitting a breakpoint.")
         utils.dbgPrint(" b* | set breakpoints               Setting breakpoints. Use ?b for more help.")
         utils.dbgPrint(" fr | resolve FUNC LIB              Returns the address for a function from a dll.")
@@ -69,6 +69,8 @@ class Parser:
         utils.dbgPrint(" id | inject_dll PID DLL            Injects DLL into process PID.")
         utils.dbgPrint(" is | inject_shellcode PID          Injects sellcode from the shellcode.py file into process PID.")
         utils.dbgPrint(" wa | write_adr ADD LEN DATA        Writes data to an address.")
+        utils.dbgPrint(" su | seh_unwind                    Dump the top of the SEH handler.")
+        utils.dbgPrint(" tu | stack_unwind                  Dump the top of the stack.")
 
         utils.dbgPrint("\n")
 
@@ -79,6 +81,8 @@ class Parser:
         utils.dbgPrint("\n")
 
         utils.dbgPrint(" Variables:", Fore.GREEN)
+        utils.dbgPrint("          pid | PID                 Set a pid to attach to.")
+        utils.dbgPrint("   executable | PATH                Set the path for an executable to be launched and attached to.")
         utils.dbgPrint("      verbose | True|False          Enables more output.")
         utils.dbgPrint("      debug   | True|False          Enables debugging output for development and bug hunting.")
         utils.dbgPrint("      logging | True|False          Enable logging to FILE.")
@@ -112,94 +116,106 @@ class Parser:
 
     # Main function that takes a command and determines if it is an allowed command and executes the necessary functions
     def runCommand(self, command):
+        splitCommand = command.split()
         if self.variables["logging"] is True:
-            utils.dbgLogFileWrite("\n[%s]> %s" % (self.processName, command))                   # Adds prompt to log
-        if command == '':                                                                       # If nothing is entered
+            utils.dbgLogFileWrite("\n[%s]> %s" % (self.processName, command))             # Adds prompt to log
+        if command == '':                                                                 # If nothing is entered
             return
-        elif command.split()[0] == 'set' or command.split()[0] == 's':                          # s or set
+        elif splitCommand[0] == 'set' or splitCommand[0] == 's':                          # s or set
             self.variableParse(command)
-        elif command == 'clear' or command == 'cl':                                             # cl or clear
+        elif command == 'clear' or command == 'cl':                                       # cl or clear
             os.system("cls")
-        elif command.split()[0] == 'l' or command.split()[0] == 'list':                         # l or list
-            if len(command.split()) == 1:
+        elif splitCommand[0] == 'l' or splitCommand[0] == 'list':                         # l or list
+            if len(splitCommand) == 1:
                 dbg.processList()
             else:
-                dbg.processList(searchName=str(command.split()[1]))
-        elif command == 'help' or command == "?":                                               # ? or help
+                dbg.processList(searchName=str(splitCommand[1]))
+        elif command == 'help' or command == "?":                                         # ? or help
             self.help()
-        elif command.split()[0] == 'pm' or command.split()[0] == "process_monitor":             # pm or process_monitor
+        elif splitCommand[0] == 'pm' or splitCommand[0] == "process_monitor":             # pm or process_monitor
             self.startProcessMonitor()
-        elif command.split()[0] == 'fm' or command.split()[0] == "file_monitor":                # fm or file_monitor
+        elif splitCommand[0] == 'fm' or splitCommand[0] == "file_monitor":                # fm or file_monitor
             self.startFileMonitor(command)
-        elif command[0] == 'p' or command.split()[0][:6] == 'print_':                           # p or print_*
+        elif command[0] == 'p' or splitCommand[0][:6] == 'print_':                        # p or print_*
             self.printParse(command)
-        elif command == "exit" or command == "e":                                               # e or exit
+        elif command == "exit" or command == "e":                                         # e or exit
             utils.dbgPrint("\n[*] Closing processes, files, and exiting.\n", Fore.GREEN)
             if self.variables["logging"] is True:
                 utils.dbgLogFileClose()
             exit()
-        elif command == "?p" or command == "?print":                                            # ?p or ?print
+        elif command == "?p" or command == "?print":                                      # ?p or ?print
             self.printHelp()
-        elif command == "?b" or command == "?breakpoint":                                       # ?b or ?breakpoint
+        elif command == "?b" or command == "?breakpoint":                                 # ?b or ?breakpoint
             self.breakpointHelp()
-        elif command.split()[0][0] == "b" or command.split()[0][:5] == "break":                 # b* or break*
+        elif splitCommand[0][0] == "b" or splitCommand[0][:5] == "break":                 # b* or break*
             self.breakpointParse(command)
-        elif command.split()[0] == 'r' or command.split()[0] == "run":                          # r or run
+        elif splitCommand[0] == 'r' or splitCommand[0] == "run":                          # r or run
             if self.fileMode is True:
                 dbg.enableFileMode()
             dbg.run()
-        elif command.split()[0] == 'c' or command.split()[0] == "continue":                     # c or continue
+        elif splitCommand[0] == 'c' or splitCommand[0] == "continue":                     # c or continue
             dbg.continueRunning()
             return DBG_CONTINUE
-        elif command.split()[0] == 'd' or command.split()[0] == "detach":                       # d or detach
+        elif splitCommand[0] == 'd' or splitCommand[0] == "detach":                       # d or detach
             dbg.detach()
             self.processName = dbg.processName
-        elif command.split()[0] == 'wa' or command.split()[0] == "write_adr":                   # wa or write_adr
+        elif splitCommand[0] == 'wa' or splitCommand[0] == "write_adr":                   # wa or write_adr
             dbg.writeMemory(command)
-        elif command.split()[0] == 'fr' or command.split()[0] == "resolve":                     # fr or resolve
-            if len(command.split()) < 3:
+        elif splitCommand[0] == 'fr' or splitCommand[0] == "resolve":                     # fr or resolve
+            if len(splitCommand) < 3:
                 utils.dbgPrint("\n[-] Improper arguments. See help with ?.\n", Fore.RED)
                 return
-            dbg.getDllFunctionAddress(command.split()[1], command.split()[2])
-        elif command.split()[0] == "a" or command.split()[0] == "attach":                       # a or attach
-            if len(command.split()) > 1:
-                self.attach(command.split()[1])
+            dbg.getDllFunctionAddress(splitCommand[1], splitCommand[2])
+        elif splitCommand[0] == "a" or splitCommand[0] == "attach":                       # a or attach
+            if len(splitCommand) > 1:
+                self.attach(splitCommand[1])
                 self.processName = dbg.processName
-                return
+                return True
+            elif self.variables["pid"] is not 0:               # if the pid variable is set then no argument is needed
+                self.attach(self.variables["pid"])
+                self.processName = dbg.processName
+                return True
             else:
                 utils.dbgPrint("\n[-] Provide a PID to attach to.\n", Fore.RED)
-                return
-        elif command.split()[0] == "o" or command.split()[0] == "open":                         # o or open
-            if len(command.split()) > 1:
-                self.openAndAttach(command.split()[1])
-                return
+                return False
+        elif splitCommand[0] == "o" or splitCommand[0] == "open":                         # o or open
+            if len(splitCommand) > 1:
+                self.openAndAttach(splitCommand[1])
+                return True
+            elif self.variables["executable"] is not None:
+                self.openAndAttach(splitCommand[1])
+                return True
             else:
                 utils.dbgPrint("\n[-] Provide a path to an executable to launch.\n", Fore.RED)
-                return
-        elif command.split()[0] == 'dc' or command.split()[0] == "dump_context":                 # dc or dump_context
+                return False
+        elif splitCommand[0] == 'dc' or splitCommand[0] == "dump_context":                 # dc or dump_context
             dbg.dumpContext()
-        elif command.split()[0] == 'sr' or command.split()[0] == "set_reg":                      # sr or set_register
-            if len(command.split()) < 3:
+        elif splitCommand[0] == 'su' or splitCommand[0] == "seh_unwind":                   # su or seh_unwind
+            dbg.dumpSEH()
+        elif splitCommand[0] == 'tu' or splitCommand[0] == "stack_unwind":                 # tu or stack_unwind
+            dbg.dumpStack()
+        elif splitCommand[0] == 'sr' or splitCommand[0] == "set_reg":                      # sr or set_register
+            if len(splitCommand) < 3:
                 utils.dbgPrint("[-] Not enough args supplied.")
                 return False
-            elif len(command.split()) == 3:
-                dbg.setRegister(command.split()[1].upper(), int(command.split()[2], 0))
+            elif len(splitCommand) == 3:
+                dbg.setRegister(splitCommand[1].upper(), int(splitCommand[2], 0))
             else:
-                dbg.setRegister(command.split()[1].upper(), int(command.split()[2], 0), int(command.split()[3]))
-        elif command.split()[0] == 'id' or command.split()[0] == "inject_dll":                   # id or inject_dll
-            if len(command.split()) != 3:
+                dbg.setRegister(splitCommand[1].upper(), int(splitCommand[2], 0), int(splitCommand[3]))
+        elif splitCommand[0] == 'id' or splitCommand[0] == "inject_dll":                  # id or inject_dll
+            if len(splitCommand) != 3:
                 utils.dbgPrint("\n[-] Improper args supplied.", Fore.RED)
                 return False
-            dbg.dllInject(int(command.split()[1]), command.split()[2])
-        elif command.split()[0] == 'is' or command.split()[0] == "inject_shellcode":             # is or inject_shellcode
-            if len(command.split()) != 2:
+            dbg.dllInject(int(splitCommand[1]), splitCommand[2])
+        elif splitCommand[0] == 'is' or splitCommand[0] == "inject_shellcode":            # is or inject_shellcode
+            if len(splitCommand) != 2:
                 utils.dbgPrint("\n[-] Improper args supplied.", Fore.RED)
                 return False
-            dbg.shellcodeInject(int(command.split()[1]))
-        elif command.split()[0] == 'di' or command.split()[0] == "dump_info":                    # di or dump_info
+            dbg.shellcodeInject(int(splitCommand[1]))
+        elif splitCommand[0] == 'di' or splitCommand[0] == "dump_info":                   # di or dump_info
             dbg.dumpInfo(command)
         else:
-            self.seeHelp()
+            self.seeHelp()                                                                # incorrect command entered
 
     # Parse commands that begin with 'p' or 'print'
     def printParse(self, command):

@@ -6,6 +6,7 @@ import datetime
 
 init(autoreset=True)
 
+# Colors for some stuff
 N_A_color = Fore.RED
 heap_color = Fore.YELLOW
 stack_color = Fore.CYAN
@@ -71,6 +72,6 @@ class Utilities:
 
         return reduce(lambda x, y: x + y, lst)
 
-    # Convert hex repr to string
+    # Convert hex to string
     def toStr(self, s):
         return s and chr(atoi(s[:2], base=16)) + toStr(s[2:]) or ''

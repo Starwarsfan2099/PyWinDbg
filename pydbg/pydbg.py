@@ -3530,7 +3530,7 @@ class pydbg:
         @return:    Previous access protection.
         '''
         if self.debug is True:
-            utils.dbgPrint("[*] VirtualProtectEx: Base: 0x%08x, Size: %d, Protection: %08x" % (base_address, size, protection), Fore.GREEN)
+            utils.dbgPrint("[DEBUG] VirtualProtectEx: Base: 0x%08x, Size: %d, Protection: %08x" % (base_address, size, protection), Fore.GREEN)
 
         old_protect = c_ulong(0)
 

@@ -149,7 +149,7 @@ Dumping SEH can be performed with `dump_seh` (`ds`).
 And dump the stack with `sump_stack` (`dt`).
 
 ## Process snapshotting
-![Process snapshot](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/snapshot.PNG)
+![Process snapshot](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/snapshots.PNG)
 Create a process snapshot with `snapshot_create` (`sc`).
 Restore that snapshot with `snapshot_restore` (`sr`).
 

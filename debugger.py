@@ -20,6 +20,9 @@ import wmi
 import pythoncom
 import tempfile
 import threading
+import multiprocessing
+import msvcrt
+import time
 
 utils = utilities.Utilities.getInstance()
 
@@ -175,7 +178,10 @@ class debugger:
                 self.pidInfo(pid)
             except ValueError:
                 try:
-                    pe = pefile.PE(command.split()[1])
+                    executablePath = command.split(" ", 1)[1]
+                    utils.dbgPrint("[DEBUG] Executable path: %s" % executablePath, Fore.GREEN, verbose=self.debug)
+                    utils.dbgPrint("")
+                    pe = pefile.PE(executablePath)
                     self.parseBinaryInfo(pe.dump_info())
                 except WindowsError:
                     utils.dbgPrint("\n[-] Unable to find file %s\n" % command.split()[1], Fore.RED)
@@ -766,8 +772,8 @@ class debugger:
             c = wmi.WMI()
             process_watcher = c.Win32_Process.watch_for("creation")
             while True:
+                utils.dbgPrint("[DEBUG] Watching for processes now...", Fore.GREEN, verbose=self.debug)
                 new_process = process_watcher()
-
                 proc_owner = new_process.GetOwner()
                 proc_owner = "%s\\%s" % (proc_owner[0], proc_owner[2])
                 create_date = new_process.CreationDate

@@ -64,5 +64,6 @@ if args.file_monitor is True:                                       # File monit
 utils.dbgPrint("")
 
 # Start the main command prompt loop
-while True:
-    parser.runCommand(raw_input(utils.dbgPrint("[%s]> " % parser.processName, Fore.GREEN, inputLine=True)))
+if __name__ == '__main__':
+    while True:
+        parser.runCommand(raw_input(utils.dbgPrint("[%s]> " % parser.processName, Fore.GREEN, inputLine=True)))

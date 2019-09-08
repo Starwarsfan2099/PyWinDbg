@@ -172,6 +172,7 @@ Launched with `process_monitor` (`pm`) or from the command line options with `-p
 `di` or `dump_info` can be used to dump information on the currently attached process if no arguments are passed.
 If a PID is passed, it will dump the some information.
 If an executable or DLL is passed, it will dump the headers, sections, architecture information, and more.
+WARNING: If an executable is passed it will produce a lot of output so it's best to have logging enabled.
 
 ![Dumping process information](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/dump_info_3.png)
 ![Dumping exe information](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/dump_info_1.png)

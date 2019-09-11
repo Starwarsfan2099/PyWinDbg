@@ -8,6 +8,7 @@ from colorama import init, Fore
 import os
 import debugger
 from sys import exit
+from subprocess import check_output
 
 init(autoreset=True)
 currentTime = datetime.datetime.now()
@@ -52,6 +53,7 @@ class Parser:
         utils.dbgPrint(" cl | clear                         Clear the console.")
         utils.dbgPrint(" s  | set VARIABLE VALUE            Set a variable.")
         utils.dbgPrint(" ?  | help                          This help menu.")
+        utils.dbgPrint(" cm | command CMD                   Execute command CMD with command prompt..")
 
         utils.dbgPrint("\n")
 
@@ -220,6 +222,15 @@ class Parser:
             dbg.shellcodeInject(int(splitCommand[1]))
         elif splitCommand[0] == 'di' or splitCommand[0] == "dump_info":                   # di or dump_info
             dbg.dumpInfo(command)
+        elif splitCommand[0] == 'cm' or splitCommand[0] == "command":                     # cm or command
+            utils.dbgPrint("")
+            command = " ".join(splitCommand[1:])
+            utils.dbgPrint("[DEBUG] Command: %s" % command, Fore.GREEN, verbose=self.debug)
+            try:
+                output = check_output(command.split(), shell=True)
+            except:                 # Could not find command
+                output = ""
+            utils.dbgPrint(output)
         else:
             self.seeHelp()                                                                # incorrect command entered
 

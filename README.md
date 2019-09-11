@@ -19,6 +19,7 @@ by Starwarsfan2099
  cl | clear                         Clear the console.
  s  | set VARIABLE VALUE            Set a variable.
  ?  | help                          This help menu.
+ cm | command CMD                   Execute command CMD with command prompt..
 
 
  a  | attach PID                    Attach to a process ID, or to the PID variable if set.

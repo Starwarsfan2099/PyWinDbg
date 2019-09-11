@@ -220,7 +220,7 @@ Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use my local install 
 - ~~Add memory reading/writing.~~
 - ~~Print register and contents in different formats.~~
 - ~~Add shellcode injection.~~
-- Dump SEH after breakpoint is hit.
+- ~~Dump SEH after breakpoint is hit.~~
 - Memory and hardware breakpoints.
 
 ## Dependencies

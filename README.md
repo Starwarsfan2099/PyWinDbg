@@ -223,17 +223,8 @@ Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use my local install 
 - ~~Dump SEH after breakpoint is hit.~~
 - Memory and hardware breakpoints.
 
-## Dependencies
+## Installing Dependencies
 
-- pefile
-- psutil
-- win32con
-- win32api
-- win32security
-- win32file
-- wmi
-- pythoncom
-- tempfile
-- colorama
-- argparse
-- cPickle
+Building requires the Microsoft Visual C++ Compiler for Python 2.7 be installed from [here](https://www.microsoft.com/en-us/download/details.aspx?id=44266).
+PyDasm needs to be built and installed, a working Windows 10 fork can be found (here)[https://github.com/axcheron/pydasm].
+Other missing dependencies should be able to be easily installed with `pip`.

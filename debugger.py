@@ -607,7 +607,7 @@ class debugger:
         def check_accessv(dbg):
             if dbg.dbg.u.Exception.dwFirstChance:
                 return DBG_EXCEPTION_NOT_HANDLED
-            crash_bin = dbgUtils.crash_binning.crash_binning()
+            crash_bin = dbgUtils.crash_binning()
             crash_bin.record_crash(dbg)
             crash = crash_bin.crash_synopsis().split("\n")
             for line in crash:

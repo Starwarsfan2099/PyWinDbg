@@ -238,6 +238,9 @@ class Parser:
     def printParse(self, command):
         command = command.split()
         if command[0] == 'pv' or command[0] == 'print_var':                                     # Print variable
+            if len(command) is 1:
+                utils.dbgPrint("\n[-] Invalid variable name.\n", Fore.RED)
+                return False
             input = command[1].lower()
             variable = self.checkVariable(input)
             if variable is not None:

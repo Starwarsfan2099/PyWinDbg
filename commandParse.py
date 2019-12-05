@@ -317,6 +317,7 @@ class Parser:
                 if ".txt" in value:
                     self.variables[input] = value
                     utils.dbgPrint("\n%s = %s\n" % (input, str(self.variables[input])))
+                    self.variableParse("set logging true")
                     return
                 else:
                     utils.dbgPrint("\n[-] Must be a .txt file\n", Fore.RED)

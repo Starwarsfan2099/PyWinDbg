@@ -244,7 +244,7 @@ class Parser:
             input = command[1].lower()
             variable = self.checkVariable(input)
             if variable is not None:
-                utils.dbgPrint("\n[*] %s = " % input, Fore.GREEN, dualline=True, secondline="%s\n" % variable)
+                utils.dbgPrint("\n[*] %s = " % input, Fore.GREEN, secondLine="%s\n" % variable)
             else:
                 utils.dbgPrint("\n[-] Invalid variable name.\n", Fore.RED)
         elif command[0] == 'pr' or command[0] == 'print_register':                              # Print register

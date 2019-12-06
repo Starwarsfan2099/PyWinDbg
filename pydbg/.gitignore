@@ -1,0 +1,5 @@
+*.spec
+*.obj
+*.exp
+*.lib
+*.pyc

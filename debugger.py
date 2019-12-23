@@ -9,7 +9,6 @@ from pydbg.defines import *
 from colorama import Fore
 import pefile
 import os
-import sys
 import struct
 import psutil
 import win32con
@@ -20,9 +19,6 @@ import wmi
 import pythoncom
 import tempfile
 import threading
-import multiprocessing
-import msvcrt
-import time
 
 utils = utilities.Utilities.getInstance()
 
@@ -49,6 +45,7 @@ class debugger:
         return True
 
     def loadExecutable(self, path, processName):
+        utils.dbgPrint("[DEBUG] Path: %s" % path, Fore.GREEN, verbose=self.debug)
         self.processName = processName
         self.executableLoaded = True
         self.executablePath = path

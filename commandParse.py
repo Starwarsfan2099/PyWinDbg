@@ -118,7 +118,7 @@ class Parser:
         # utils.dbgPrint(" bm | break_mem ADDRESS             Sets a memory breakpoint at address.")
         utils.dbgPrint("\n")
 
-    # Main function that takes a command and determines if it is an allowed command and executes the necessary functions
+    # Main function that takes a command and determines if teh command is an allowed command and executes the necessary functions
     def runCommand(self, command):
         splitCommand = command.split()
         if self.variables["logging"] is True:
@@ -415,9 +415,12 @@ class Parser:
     # Open an executable
     def openAndAttach(self, path):
         utils.dbgPrint("\n[*] Opening %s\n" % path, Fore.GREEN)
-        self.processName = path.split("\\")[-1]
-        dbg.loadExecutable(path, self.processName)
-        return True
+        if os.path.exists(path) is True:
+            self.processName = path.split("\\")[-1]
+            dbg.loadExecutable(path, self.processName)
+            return True
+        else:
+            utils.dbgPrint("\n[-] Error: Executable not found.\n", Fore.RED)
 
     # Start the tools
     def startProcessMonitor(self):

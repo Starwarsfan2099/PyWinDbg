@@ -1,6 +1,6 @@
 # encoding=utf8
 # debugger.py
-# Created by Starwarfan2099 on 6/4/2019
+# Created by Starwarsfan2099 on 6/4/2019
 
 import utilities
 import debuggerUtilities as dbgUtils
@@ -120,25 +120,25 @@ class debugger:
     def pidInfo(self, pid):
         try:
             p = psutil.Process(pid)
+            utils.dbgPrint("\n[*] Name: ", Fore.GREEN, secondLine="%s" % p.name())
+            utils.dbgPrint("[*] Executable path: ", Fore.GREEN, secondLine="%s" % p.exe())
+            utils.dbgPrint("[*] Working directory: ", Fore.GREEN, secondLine="%s" % p.cwd())
+            command = ""
+            for item in p.cmdline():
+                command = command + item + " "
+            utils.dbgPrint("[*] Command line: ", Fore.GREEN, secondLine="\"%s\"" % command.strip())
+            utils.dbgPrint("[*] Process: ", Fore.GREEN, secondLine="%d" % p.pid)
+            utils.dbgPrint("[*] Parent PID: ", Fore.GREEN, secondLine="%d" % p.ppid())
+            utils.dbgPrint("[*] Status: ", Fore.GREEN, secondLine="%s" % p.status())
+            utils.dbgPrint("[*] Username: ", Fore.GREEN, secondLine="%s" % p.username())
+            utils.dbgPrint("[*] Process creation time: ", Fore.GREEN, secondLine="%f" % p.create_time())
+            utils.dbgPrint("[*] Threads: ", Fore.GREEN, secondLine="%d\n" % p.num_threads())
         except psutil.NoSuchProcess:
             utils.dbgPrint("\n[-] Process with a PID of %d not found.\n" % pid, Fore.RED)
             return False
         except psutil.AccessDenied:
             utils.dbgPrint("\n[-] Process with a PID of %d could not be accesses.\n" % pid, Fore.RED)
             return False
-        utils.dbgPrint("\n[*] Name: ", Fore.GREEN, secondLine="%s" % p.name())
-        utils.dbgPrint("[*] Executable path: ", Fore.GREEN, secondLine="%s" % p.exe())
-        utils.dbgPrint("[*] Working directory: ", Fore.GREEN, secondLine="%s" % p.cwd())
-        command = ""
-        for item in p.cmdline():
-            command = command + item + " "
-        utils.dbgPrint("[*] Command line: ", Fore.GREEN, secondLine="\"%s\"" % command.strip())
-        utils.dbgPrint("[*] Process: ", Fore.GREEN, secondLine="%d" % p.pid)
-        utils.dbgPrint("[*] Parent PID: ", Fore.GREEN, secondLine="%d" % p.ppid())
-        utils.dbgPrint("[*] Status: ", Fore.GREEN, secondLine="%s" % p.status())
-        utils.dbgPrint("[*] Username: ", Fore.GREEN, secondLine="%s" % p.username())
-        utils.dbgPrint("[*] Process creation time: ", Fore.GREEN, secondLine="%f" % p.create_time())
-        utils.dbgPrint("[*] Threads: ", Fore.GREEN, secondLine="%d\n" % p.num_threads())
 
     def parseBinaryInfo(self, info):
         for line in info.split("\n"):
@@ -233,11 +233,11 @@ class debugger:
         self.dbg.set_callback(RIP_EVENT, nine)
 
     def getLibraries(self):
-        first = True
+        i = 0
         for modules in self.dbg.enumerate_modules():
-            if first:
+            if i == 0:
                 utils.dbgPrint("[*] Executable > %s" % modules[0], Fore.GREEN)
-                first = False
+                i += 1
             else:
                 utils.dbgPrint("[+] DLL Loaded(%s) > %s" % (modules[1], modules[0]), Fore.BLUE)
         return True
@@ -245,7 +245,7 @@ class debugger:
     def readMemory(self, address, length):
         address = int(address, 0)
         value = self.dbg.read_process_memory(address, int(length))
-        hexValue= utils.toHex(value)
+        hexValue = utils.toHex(value)
         utils.dbgPrint("\n[*] Value: ", Fore.GREEN, secondLine="%s\n" % value)
         utils.dbgPrint("\n[*] Hex: ", Fore.GREEN, secondLine="%s\n" % hexValue)
         return True

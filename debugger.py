@@ -2,23 +2,25 @@
 # debugger.py
 # Created by Starwarsfan2099 on 6/4/2019
 
-import utilities
-import debuggerUtilities as dbgUtils
-from pydbg import *
-from pydbg.defines import *
-from colorama import Fore
-import pefile
 import os
 import struct
-import psutil
-import win32con
-import win32api
-import win32security
-import win32file
-import wmi
-import pythoncom
 import tempfile
 import threading
+
+import pefile
+import psutil
+import pythoncom
+import win32api
+import win32con
+import win32file
+import win32security
+import wmi
+from colorama import Fore
+
+import debuggerUtilities as dbgUtils
+import utilities
+from pydbg import *
+from pydbg.defines import *
 
 utils = utilities.Utilities.getInstance()
 

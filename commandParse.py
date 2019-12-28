@@ -1,14 +1,16 @@
 # commandParse.py
 # Created by Starwarsfan2099 on 4/22/2019
 
-import utilities
 import datetime
-from pydbg.defines import *
-from colorama import init, Fore
 import os
-import debugger
-from sys import exit
 from subprocess import check_output
+from sys import exit
+
+from colorama import init, Fore
+
+import debugger
+import utilities
+from pydbg.defines import *
 
 init(autoreset=True)
 currentTime = datetime.datetime.now()

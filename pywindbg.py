@@ -2,9 +2,11 @@
 # Created by Starwarsfan2099 on 4/22/2019
 
 import argparse
-import utilities
-import commandParse
+
 from colorama import Fore
+
+import commandParse
+import utilities
 
 version = "0.9"
 utils = utilities.Utilities()

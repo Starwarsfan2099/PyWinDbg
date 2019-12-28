@@ -213,7 +213,7 @@ WARNING: If an executable is passed it will produce a lot of output so it's best
 
 `shellcode.py`: File that PyWinDbg imports shellcode from for injection into a process.
 
-Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use my local install of upx, you'll probably have to change the path or remove the upx option.
+Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use an environment variable, `UPX_PATH` pointing to the UPX install directory.
 
 ## TODO
 

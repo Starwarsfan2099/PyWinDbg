@@ -658,9 +658,9 @@ class debugger:
         CreateFileW = self.dbg.func_resolve_debuggee("kernel32.dll", "CreateFileW")
         CreateFileA = self.dbg.func_resolve_debuggee("kernel32.dll", "CreateFileA")
         utils.dbgPrint("[*]Resolving %s @ %08x" % (function2, CreateFileW), Fore.GREEN)
-        utils.dbgPrint("[*]Resolving %s @ Unknown" % (function2), Fore.GREEN)
+        utils.dbgPrint("[*]Resolving %s @ Unknown" % function2, Fore.GREEN)
         utils.dbgPrint("[*]Resolving %s @ %08x" % (function3, CreateFileA), Fore.GREEN)
-        utils.dbgPrint("[*]Resolving %s @ Unknown" % (function2), Fore.GREEN)
+        utils.dbgPrint("[*]Resolving %s @ Unknown" % function2, Fore.GREEN)
         self.dbg.bp_set(CreateFileA, description="CreateFileA", handler=handler_CreateFileA)
         self.dbg.bp_set(CreateFileW, description="CreateFileW", handler=handler_CreateFileW)
 
@@ -686,7 +686,7 @@ class debugger:
         h_process = kernel32.OpenProcess(PROCESS_ALL_ACCESS, False, int(pid))
 
         if not h_process:
-            utils.dbgPrint("\n[-] Couldn't get handle to PID: %s\n" % (pid), Fore.RED)
+            utils.dbgPrint("\n[-] Couldn't get handle to PID: %s\n" % pid, Fore.RED)
             return False
 
         # Allocate space for DLL path
@@ -712,7 +712,7 @@ class debugger:
             utils.dbgPrint("[-] Injection Failed, exiting with error code: %s\n" % error, Fore.RED)
             return False
 
-        utils.dbgPrint("[+] Remote Thread with ID 0x%08x created.\n" % (thread_id.value), Fore.GREEN)
+        utils.dbgPrint("[+] Remote Thread with ID 0x%08x created.\n" % thread_id.value, Fore.GREEN)
         error = kernel32.GetLastError()
         utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
         return True

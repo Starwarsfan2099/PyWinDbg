@@ -24,7 +24,7 @@ class Parser:
     @staticmethod
     def getInstance():
         """ Static access method. """
-        if Parser.__instance == None:
+        if Parser.__instance is None:
             Parser()
         return Parser.__instance
 
@@ -45,10 +45,12 @@ class Parser:
             "hide-debugger": False                                                          # Enable hiding the debugger
         }
 
-    def seeHelp(self):
+    @staticmethod
+    def seeHelp():
         utils.dbgPrint("\n[-] Invalid command usage. Use \"help\" for help.\n", Fore.RED)
 
-    def help(self):
+    @staticmethod
+    def help():
         utils.dbgPrint("\n Commands:", Fore.GREEN)
         utils.dbgPrint(" p* | print stuff                   Prints stuff. Use ?p for more help.")
         utils.dbgPrint(" e  | exit                          Exits the debugger and closes the process if active.")
@@ -105,14 +107,16 @@ class Parser:
 
         utils.dbgPrint("\n")
 
-    def printHelp(self):
+    @staticmethod
+    def printHelp():
         utils.dbgPrint(" \nPrint help:", Fore.GREEN)
         utils.dbgPrint(" pv | print_var VARIABLE           Specifically prints a debugger variable.")
         utils.dbgPrint(" pr | print_reg REGISTER           Prints the value in the specified REGISTER")
         utils.dbgPrint(" pa | print_adr ADDRESS LENGTH     Prints the value stored in memory at ADDRESS")
         utils.dbgPrint("\n")
 
-    def breakpointHelp(self):
+    @staticmethod
+    def breakpointHelp():
         utils.dbgPrint(" \nBreakpoint help:", Fore.GREEN)
         utils.dbgPrint(" b  | break ADDRESS                 Sets a soft breakpoint at address.")
         utils.dbgPrint(" bf | break_func FUNCTION DLL       Sets a soft breakpoint on a function imported from a dll.")
@@ -425,12 +429,14 @@ class Parser:
             utils.dbgPrint("\n[-] Error: Executable not found.\n", Fore.RED)
 
     # Start the tools
-    def startProcessMonitor(self):
+    @staticmethod
+    def startProcessMonitor():
         utils.dbgPrint("\n[*] Starting process monitor...", Fore.GREEN)
         utils.dbgPrint("\n[*] Press Ctrl-C once and wait a few seconds to kill the process monitor...", Fore.GREEN)
         dbg.processMonitor()
 
-    def startFileMonitor(self, command):
+    @staticmethod
+    def startFileMonitor(command):
         utils.dbgPrint("\n[*] Starting file monitor...", Fore.GREEN)
         utils.dbgPrint("\n[*] Press Ctrl-C once and wait for another exception to get caught, then the tool will exit cleanly.", Fore.GREEN)
         dbg.fileMonitor(command)

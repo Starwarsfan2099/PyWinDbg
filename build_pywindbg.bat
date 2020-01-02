@@ -1,8 +1,8 @@
 @echo off
 echo.
-echo Building PyWindDbg...
+echo [92mBuilding PyWindDbg...[0m
 echo.
 pyinstaller pywindbg.py -F --upx-dir %UPX_PATH% --distpath Executables --console
 echo.
-echo Done!
+echo [92mDone![0m
 echo.

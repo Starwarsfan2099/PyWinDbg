@@ -139,7 +139,7 @@ class debugger:
             utils.dbgPrint("\n[-] Process with a PID of %d not found.\n" % pid, Fore.RED)
             return False
         except psutil.AccessDenied:
-            utils.dbgPrint("\n[-] Process with a PID of %d could not be accesses.\n" % pid, Fore.RED)
+            utils.dbgPrint("\n[-] Process with a PID of %d could not be accessed.\n" % pid, Fore.RED)
             return False
 
     def parseBinaryInfo(self, info):

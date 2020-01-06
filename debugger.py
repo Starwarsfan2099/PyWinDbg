@@ -641,7 +641,7 @@ class debugger:
             addr_FilePointer = self.dbg.read_process_memory(self.dbg.context.Esp + 0x4, 4)
             addr_FilePointer = struct.unpack("<L", addr_FilePointer)[0]
             Filename = self.dbg.smart_dereference(addr_FilePointer, True)
-            utils.dbgPrint("[*]CreateFileW -> %s" % Filename, utilities.heap_color)
+            utils.dbgPrint("[*] CreateFileW -> %s" % Filename, utilities.heap_color)
             return DBG_CONTINUE
 
         def handler_CreateFileA(dbg):
@@ -650,7 +650,7 @@ class debugger:
             addr_FilePointer = self.dbg.read_process_memory(self.dbg.context.Esp + 0x4, 4)
             addr_FilePointer = struct.unpack("<L", addr_FilePointer)[0]
             buffer_FileA = self.dbg.smart_dereference(addr_FilePointer, True)
-            utils.dbgPrint("[*]CreateFileA -> %s" % buffer_FileA, Fore.GREEN)
+            utils.dbgPrint("[*] CreateFileA -> %s" % buffer_FileA, Fore.GREEN)
             return DBG_CONTINUE
 
         function2 = "CreateFileW"

@@ -113,8 +113,8 @@ _MEMORY_BASIC_INFORMATION._fields_ = [
     ('Protect', DWORD),
     ('Type', DWORD),
 ]
-assert sizeof(_MEMORY_BASIC_INFORMATION) == 28, sizeof(_MEMORY_BASIC_INFORMATION)
-assert alignment(_MEMORY_BASIC_INFORMATION) == 4, alignment(_MEMORY_BASIC_INFORMATION)
+# assert sizeof(_MEMORY_BASIC_INFORMATION) == 28, sizeof(_MEMORY_BASIC_INFORMATION)
+# assert alignment(_MEMORY_BASIC_INFORMATION) == 4, alignment(_MEMORY_BASIC_INFORMATION)
 # C:/PROGRA~1/gccxml/bin/Vc6/Include/winnt.h 1539
 class _FLOATING_SAVE_AREA(Structure):
     pass
@@ -199,8 +199,8 @@ _SYSTEM_INFO._fields_ = [
     ('wProcessorLevel', WORD),
     ('wProcessorRevision', WORD),
 ]
-assert sizeof(_SYSTEM_INFO) == 36, sizeof(_SYSTEM_INFO)
-assert alignment(_SYSTEM_INFO) == 4, alignment(_SYSTEM_INFO)
+# assert sizeof(_SYSTEM_INFO) == 36, sizeof(_SYSTEM_INFO)
+# assert alignment(_SYSTEM_INFO) == 4, alignment(_SYSTEM_INFO)
 CHAR = c_char
 LPSTR = POINTER(CHAR)
 LPBYTE = POINTER(BYTE)
@@ -225,8 +225,8 @@ _STARTUPINFOA._fields_ = [
     ('hStdOutput', HANDLE),
     ('hStdError', HANDLE),
 ]
-assert sizeof(_STARTUPINFOA) == 68, sizeof(_STARTUPINFOA)
-assert alignment(_STARTUPINFOA) == 4, alignment(_STARTUPINFOA)
+# assert sizeof(_STARTUPINFOA) == 68, sizeof(_STARTUPINFOA)
+# assert alignment(_STARTUPINFOA) == 4, alignment(_STARTUPINFOA)
 # C:/PROGRA~1/MICROS~2/VC98/Include/winbase.h 701
 class N12_DEBUG_EVENT4DOLLAR_39E(Union):
     pass

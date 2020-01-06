@@ -201,6 +201,8 @@ WARNING: If an executable is passed it will produce a lot of output so it's best
 ### Other Files
 `build_pywindbg.bat`: Script to build an executable using pyinstaller.
 
+`build_pywindbg_xp.bat`: Script to build an executable using pyinstaller that supports Windows XP.
+
 `build_buffer_overflow.bat`: Script to build an executable for `bufferOverflow.py` using pyinstaller.
 
 `build_dll.bat`: Script to build the `helloDLL.dll` included for injection. It must be ran from the Visual Studio Developer Command Prompt.
@@ -227,5 +229,5 @@ Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use an environment va
 
 Building requires the Microsoft Visual C++ Compiler for Python 2.7 be installed from [here](https://www.microsoft.com/en-us/download/details.aspx?id=44266).
 PyDasm needs to be built and installed, a working Windows 10 fork can be found [here](https://github.com/axcheron/pydasm).
-Other missing dependencies should be able to be easily installed with `pip`.
+Other dependencies can be installed with `pip install -r requirements.txt`.
 If you want support for Windows XP, you need `psutil 3.4.2`.

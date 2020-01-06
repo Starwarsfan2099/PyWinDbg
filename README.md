@@ -229,5 +229,6 @@ Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use an environment va
 
 Building requires the Microsoft Visual C++ Compiler for Python 2.7 be installed from [here](https://www.microsoft.com/en-us/download/details.aspx?id=44266).
 PyDasm needs to be built and installed, a working Windows 10 fork can be found [here](https://github.com/axcheron/pydasm).
+If you wish to build with PyInstaller, you'll need to copy `\build\lib.win32-2.7\pydasm.pyd` to `Python27\DLLs`.
 Other dependencies can be installed with `pip install -r requirements.txt`.
 If you want support for Windows XP, you need `psutil 3.4.2`.

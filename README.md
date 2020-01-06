@@ -131,6 +131,7 @@ Hooks several Windows functions and prints any files made, deleted, or modified.
 Enabled with `set file-mode true` or from the command line options with `-f`.
 
 ## DLL injection
+`Note, shellcode and DLL injection only work into 32-bit processes.`
 ![DLL injection](https://github.com/Starwarsfan2099/PyWinDbg/blob/master/Screenshots/dll_inject.png)
 `inject_dll PID DLL` (`id`) will attempt to inject the specified dll into the specified process PID.
 You must have proper privileges and be injecting to a same bit process.

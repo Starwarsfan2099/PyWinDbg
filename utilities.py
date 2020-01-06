@@ -14,7 +14,6 @@ stack_color = Fore.CYAN
 
 currentTime = datetime.datetime.now()
 
-
 class Utilities:
     __instance = None
 

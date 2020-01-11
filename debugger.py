@@ -21,6 +21,7 @@ import debuggerUtilities as dbgUtils
 import utilities
 from pydbg import *
 from pydbg.defines import *
+import injection
 
 utils = utilities.Utilities.getInstance()
 
@@ -339,7 +340,7 @@ class debugger:
         stack_unwind = self.dbg.stack_unwind()
         utils.dbgPrint("[DEBUG]: Stack: %s" % stack_unwind, Fore.GREEN, verbose=self.debug)
         for i in xrange(len(stack_unwind)):
-            addr   = stack_unwind[i]
+            addr = stack_unwind[i]
             module = self.dbg.addr_to_module(addr)
 
             if module:
@@ -674,75 +675,14 @@ class debugger:
         self.dbg.bp_set(CreateFileW, description="CreateFileW", handler=doNothing)
 
     def dllInject(self, pid, dll):
-        utils.dbgPrint("")
-        PAGE_READWRITE = 0x04
-        PROCESS_ALL_ACCESS = (0x00F0000 | 0x00100000 | 0xFFF)
-        VIRTUAL_MEM = (0x1000 | 0x2000)
-
-        kernel32 = windll.kernel32
-        dll_len = len(dll)
-
-        # Get handle to process being injected...
-        h_process = kernel32.OpenProcess(PROCESS_ALL_ACCESS, False, int(pid))
-
-        if not h_process:
-            utils.dbgPrint("\n[-] Couldn't get handle to PID: %s\n" % pid, Fore.RED)
-            return False
-
-        # Allocate space for DLL path
-        arg_address = kernel32.VirtualAllocEx(h_process, 0, dll_len, VIRTUAL_MEM, PAGE_READWRITE)
-
-        # Write DLL path to allocated space
-        written = c_int(0)
-        kernel32.WriteProcessMemory(h_process, arg_address, dll, dll_len, byref(written))
-
-        # Resolve LoadLibraryA Address
-        h_kernel32 = kernel32.GetModuleHandleA("kernel32.dll")
-        utils.dbgPrint("[+] Resolved kernel32 library at 0x%08x." % h_kernel32, Fore.GREEN, verbose=self.verbose)
-
-        h_loadlib = kernel32.GetProcAddress(h_kernel32, "LoadLibraryA")
-        utils.dbgPrint("[+] Resolved LoadLibraryA function at 0x%08x." % h_loadlib, Fore.GREEN, verbose=self.verbose)
-
-        # Now we createRemoteThread with entrypoiny set to LoadLibraryA and pointer to DLL path as param
-        thread_id = c_ulong(0)
-
-        if not kernel32.CreateRemoteThread(h_process, None, 0, h_loadlib, arg_address, 0, byref(thread_id)):
-            utils.dbgPrint("[-] Failed to inject DLL.", Fore.RED)
-            error = kernel32.GetLastError()
-            utils.dbgPrint("[-] Injection Failed, exiting with error code: %s\n" % error, Fore.RED)
-            return False
-
-        utils.dbgPrint("[+] Remote Thread with ID 0x%08x created.\n" % thread_id.value, Fore.GREEN)
-        error = kernel32.GetLastError()
-        utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
-        return True
+        inject = injection.dllInject(pid, dll, self.verbose)
+        if inject is True:
+            utils.dbgPrint("[+] DLL injection completed.", Fore.GREEN)
 
     def shellcodeInject(self, pid):
-        try:
-            from shellcode import shellcode
-        except ImportError:
-            utils.dbgPrint("\n[-] Unable to find shellcode.py file or import shellcode from the file.\n", Fore.RED)
-            return False
-
-        utils.dbgPrint("\n[+] Shellcode: %s\n" % utils.toHex(shellcode), Fore.GREEN, verbose=self.verbose)
-        process_handle = windll.kernel32.OpenProcess(0x1F0FFF, False, pid)
-
-        if not process_handle:
-            utils.dbgPrint("\n[-] Couldn't get a handle to PID: %s\n" % pid, Fore.RED)
-            return False
-
-        memory_allocation_variable = windll.kernel32.VirtualAllocEx(process_handle, 0, len(shellcode), 0x00001000, 0x40)
-
-        utils.dbgPrint("\n[+] Address of allocated shellcode space: 0x%08x" % memory_allocation_variable, Fore.GREEN, verbose=self.verbose)
-
-        windll.kernel32.WriteProcessMemory(process_handle, memory_allocation_variable, shellcode, len(shellcode), 0)
-
-        if not windll.kernel32.CreateRemoteThread(process_handle, None, 0, memory_allocation_variable, 0, 0, 0):
-            utils.dbgPrint("[-] Failed to inject shellcode. Exiting.", Fore.RED)
-            return False
-
-        utils.dbgPrint("\n[+] Shellcode injected.\n", Fore.GREEN)
-        return True
+        inject = injection.shellcodeInjectMapping(pid, self.verbose)
+        if inject is True:
+            utils.dbgPrint("[+] Shellcode injection completed.", Fore.GREEN)
 
     def getProcessPrivilages(self, pid):
         priv_list = []

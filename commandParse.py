@@ -75,8 +75,8 @@ class Parser:
         utils.dbgPrint(" id | inject_dll PID DLL            Injects DLL into process PID.")
         utils.dbgPrint(" is | inject_shellcode PID          Injects sellcode from the shellcode.py file into process PID.")
         utils.dbgPrint(" wa | write_adr ADD LEN DATA        Writes data to an address.")
-        utils.dbgPrint(" su | seh_unwind                    Dump the top of the SEH handler.")
-        utils.dbgPrint(" tu | stack_unwind                  Dump the top of the stack.")
+        utils.dbgPrint(" ds | dump_seh                      Dump the top of the SEH handler.")
+        utils.dbgPrint(" dt | dump_stack                    Dump the top of the stack.")
         utils.dbgPrint(" sc | snapshot_create               Create a process snapshot.")
         utils.dbgPrint(" sr | snapshot_restore              Restore the processes snapshot.")
 

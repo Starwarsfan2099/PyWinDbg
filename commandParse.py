@@ -10,6 +10,7 @@ from colorama import init, Fore
 
 import debugger
 import utilities
+import tools
 from pydbg.defines import *
 
 init(autoreset=True)
@@ -74,7 +75,7 @@ class Parser:
         utils.dbgPrint(" sr | set_reg REG VAL ID            Sets register REG to VAL in thread ID, all threads if no ID is specified.")
         utils.dbgPrint(" id | inject_dll PID DLL            Injects DLL into process PID.")
         utils.dbgPrint(" is | inject_shellcode PID          Injects sellcode from the shellcode.py file into process PID.")
-        utils.dbgPrint(" wa | write_adr ADD LEN DATA        Writes data to an address.")
+        utils.dbgPrint(" wa | write_adr ADDR LEN DATA       Writes data to an address.")
         utils.dbgPrint(" ds | dump_seh                      Dump the top of the SEH handler.")
         utils.dbgPrint(" dt | dump_stack                    Dump the top of the stack.")
         utils.dbgPrint(" sc | snapshot_create               Create a process snapshot.")
@@ -429,14 +430,14 @@ class Parser:
             utils.dbgPrint("\n[-] Error: Executable not found.\n", Fore.RED)
 
     # Start the tools
-    @staticmethod
-    def startProcessMonitor():
+    def startProcessMonitor(self):
+        dbgTools = tools.Tools(self.debug, self.variables['verbose'])
         utils.dbgPrint("\n[*] Starting process monitor...", Fore.GREEN)
         utils.dbgPrint("\n[*] Press Ctrl-C once and wait a few seconds to kill the process monitor...", Fore.GREEN)
-        dbg.processMonitor()
+        dbgTools.processMonitor()
 
-    @staticmethod
-    def startFileMonitor(command):
+    def startFileMonitor(self, command):
+        dbgTools = tools.Tools(self.debug, self.variables['verbose'])
         utils.dbgPrint("\n[*] Starting file monitor...", Fore.GREEN)
         utils.dbgPrint("\n[*] Press Ctrl-C once and wait for another exception to get caught, then the tool will exit cleanly.", Fore.GREEN)
-        dbg.fileMonitor(command)
+        dbgTools.fileMonitor(command)

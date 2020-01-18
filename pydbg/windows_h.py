@@ -10,6 +10,10 @@
 # PEDRAM - line swap ... have to patch in our own __reduce__ definition to each ctype.
 #from ctypes import *
 from my_ctypes import *
+import struct
+bit_64 = False
+if int(struct.calcsize("P") * 8) == 64:
+    bit_64 = True
 
 # C:/PROGRA~1/gccxml/bin/Vc6/Include/winnt.h 4188
 class _TOKEN_PRIVILEGES(Structure):
@@ -245,16 +249,20 @@ _EXCEPTION_RECORD._fields_ = [
     ('NumberParameters', DWORD),
     ('ExceptionInformation', UINT_PTR * 15),
 ]
-assert sizeof(_EXCEPTION_RECORD) == 80, sizeof(_EXCEPTION_RECORD)
-assert alignment(_EXCEPTION_RECORD) == 4, alignment(_EXCEPTION_RECORD)
+if not bit_64: assert sizeof(_EXCEPTION_RECORD) == 80, sizeof(_EXCEPTION_RECORD)
+else: assert sizeof(_EXCEPTION_RECORD) == 88, sizeof(_EXCEPTION_RECORD)
+if not bit_64: assert alignment(_EXCEPTION_RECORD) == 4, alignment(_EXCEPTION_RECORD)
+else: assert alignment(_EXCEPTION_RECORD) == 8, alignment(_EXCEPTION_RECORD)
 EXCEPTION_RECORD = _EXCEPTION_RECORD
 _EXCEPTION_DEBUG_INFO._fields_ = [
     # C:/PROGRA~1/MICROS~2/VC98/Include/winbase.h 640
     ('ExceptionRecord', EXCEPTION_RECORD),
     ('dwFirstChance', DWORD),
 ]
-assert sizeof(_EXCEPTION_DEBUG_INFO) == 84, sizeof(_EXCEPTION_DEBUG_INFO)
-assert alignment(_EXCEPTION_DEBUG_INFO) == 4, alignment(_EXCEPTION_DEBUG_INFO)
+if not bit_64: assert sizeof(_EXCEPTION_DEBUG_INFO) == 84, sizeof(_EXCEPTION_DEBUG_INFO)
+else: assert sizeof(_EXCEPTION_DEBUG_INFO) == 96, sizeof(_EXCEPTION_DEBUG_INFO)
+if not bit_64: assert alignment(_EXCEPTION_DEBUG_INFO) == 4, alignment(_EXCEPTION_DEBUG_INFO)
+else: assert alignment(_EXCEPTION_DEBUG_INFO) == 8, alignment(_EXCEPTION_DEBUG_INFO)
 EXCEPTION_DEBUG_INFO = _EXCEPTION_DEBUG_INFO
 # C:/PROGRA~1/MICROS~2/VC98/Include/winbase.h 645
 class _CREATE_THREAD_DEBUG_INFO(Structure):
@@ -273,8 +281,10 @@ _CREATE_THREAD_DEBUG_INFO._fields_ = [
     ('lpThreadLocalBase', LPVOID),
     ('lpStartAddress', LPTHREAD_START_ROUTINE),
 ]
-assert sizeof(_CREATE_THREAD_DEBUG_INFO) == 12, sizeof(_CREATE_THREAD_DEBUG_INFO)
-assert alignment(_CREATE_THREAD_DEBUG_INFO) == 4, alignment(_CREATE_THREAD_DEBUG_INFO)
+if not bit_64: assert sizeof(_CREATE_THREAD_DEBUG_INFO) == 12, sizeof(_CREATE_THREAD_DEBUG_INFO)
+else: assert sizeof(_CREATE_THREAD_DEBUG_INFO) == 24, sizeof(_CREATE_THREAD_DEBUG_INFO)
+if not bit_64: assert alignment(_CREATE_THREAD_DEBUG_INFO) == 4, alignment(_CREATE_THREAD_DEBUG_INFO)
+else: assert alignment(_CREATE_THREAD_DEBUG_INFO) == 8, alignment(_CREATE_THREAD_DEBUG_INFO)
 CREATE_THREAD_DEBUG_INFO = _CREATE_THREAD_DEBUG_INFO
 # C:/PROGRA~1/MICROS~2/VC98/Include/winbase.h 651
 class _CREATE_PROCESS_DEBUG_INFO(Structure):
@@ -292,8 +302,10 @@ _CREATE_PROCESS_DEBUG_INFO._fields_ = [
     ('lpImageName', LPVOID),
     ('fUnicode', WORD),
 ]
-assert sizeof(_CREATE_PROCESS_DEBUG_INFO) == 40, sizeof(_CREATE_PROCESS_DEBUG_INFO)
-assert alignment(_CREATE_PROCESS_DEBUG_INFO) == 4, alignment(_CREATE_PROCESS_DEBUG_INFO)
+if not bit_64: assert sizeof(_CREATE_PROCESS_DEBUG_INFO) == 40, sizeof(_CREATE_PROCESS_DEBUG_INFO)
+else: assert sizeof(_CREATE_PROCESS_DEBUG_INFO) == 72, sizeof(_CREATE_PROCESS_DEBUG_INFO)
+if not bit_64: assert alignment(_CREATE_PROCESS_DEBUG_INFO) == 4, alignment(_CREATE_PROCESS_DEBUG_INFO)
+else: assert alignment(_CREATE_PROCESS_DEBUG_INFO) == 8, alignment(_CREATE_PROCESS_DEBUG_INFO)
 CREATE_PROCESS_DEBUG_INFO = _CREATE_PROCESS_DEBUG_INFO
 # C:/PROGRA~1/MICROS~2/VC98/Include/winbase.h 664
 class _EXIT_THREAD_DEBUG_INFO(Structure):
@@ -327,8 +339,10 @@ _LOAD_DLL_DEBUG_INFO._fields_ = [
     ('lpImageName', LPVOID),
     ('fUnicode', WORD),
 ]
-assert sizeof(_LOAD_DLL_DEBUG_INFO) == 24, sizeof(_LOAD_DLL_DEBUG_INFO)
-assert alignment(_LOAD_DLL_DEBUG_INFO) == 4, alignment(_LOAD_DLL_DEBUG_INFO)
+if not bit_64: assert sizeof(_LOAD_DLL_DEBUG_INFO) == 24, sizeof(_LOAD_DLL_DEBUG_INFO)
+else: assert sizeof(_LOAD_DLL_DEBUG_INFO) == 40, sizeof(_LOAD_DLL_DEBUG_INFO)
+if not bit_64: assert alignment(_LOAD_DLL_DEBUG_INFO) == 4, alignment(_LOAD_DLL_DEBUG_INFO)
+else: assert alignment(_LOAD_DLL_DEBUG_INFO) == 8, alignment(_LOAD_DLL_DEBUG_INFO)
 LOAD_DLL_DEBUG_INFO = _LOAD_DLL_DEBUG_INFO
 # C:/PROGRA~1/MICROS~2/VC98/Include/winbase.h 681
 class _UNLOAD_DLL_DEBUG_INFO(Structure):
@@ -337,8 +351,10 @@ _UNLOAD_DLL_DEBUG_INFO._fields_ = [
     # C:/PROGRA~1/MICROS~2/VC98/Include/winbase.h 681
     ('lpBaseOfDll', LPVOID),
 ]
-assert sizeof(_UNLOAD_DLL_DEBUG_INFO) == 4, sizeof(_UNLOAD_DLL_DEBUG_INFO)
-assert alignment(_UNLOAD_DLL_DEBUG_INFO) == 4, alignment(_UNLOAD_DLL_DEBUG_INFO)
+if not bit_64: assert sizeof(_UNLOAD_DLL_DEBUG_INFO) == 4, sizeof(_UNLOAD_DLL_DEBUG_INFO)
+else: assert sizeof(_UNLOAD_DLL_DEBUG_INFO) == 8, sizeof(_UNLOAD_DLL_DEBUG_INFO)
+if not bit_64: assert alignment(_UNLOAD_DLL_DEBUG_INFO) == 4, alignment(_UNLOAD_DLL_DEBUG_INFO)
+else: assert alignment(_UNLOAD_DLL_DEBUG_INFO) == 8, alignment(_UNLOAD_DLL_DEBUG_INFO)
 UNLOAD_DLL_DEBUG_INFO = _UNLOAD_DLL_DEBUG_INFO
 # C:/PROGRA~1/MICROS~2/VC98/Include/winbase.h 685
 class _OUTPUT_DEBUG_STRING_INFO(Structure):
@@ -349,8 +365,10 @@ _OUTPUT_DEBUG_STRING_INFO._fields_ = [
     ('fUnicode', WORD),
     ('nDebugStringLength', WORD),
 ]
-assert sizeof(_OUTPUT_DEBUG_STRING_INFO) == 8, sizeof(_OUTPUT_DEBUG_STRING_INFO)
-assert alignment(_OUTPUT_DEBUG_STRING_INFO) == 4, alignment(_OUTPUT_DEBUG_STRING_INFO)
+if not bit_64: assert sizeof(_OUTPUT_DEBUG_STRING_INFO) == 8, sizeof(_OUTPUT_DEBUG_STRING_INFO)
+else: assert sizeof(_OUTPUT_DEBUG_STRING_INFO) == 16, sizeof(_OUTPUT_DEBUG_STRING_INFO)
+if not bit_64: assert alignment(_OUTPUT_DEBUG_STRING_INFO) == 4, alignment(_OUTPUT_DEBUG_STRING_INFO)
+else: assert alignment(_OUTPUT_DEBUG_STRING_INFO) == 8, alignment(_OUTPUT_DEBUG_STRING_INFO)
 OUTPUT_DEBUG_STRING_INFO = _OUTPUT_DEBUG_STRING_INFO
 # C:/PROGRA~1/MICROS~2/VC98/Include/winbase.h 691
 class _RIP_INFO(Structure):
@@ -375,8 +393,10 @@ N12_DEBUG_EVENT4DOLLAR_39E._fields_ = [
     ('DebugString', OUTPUT_DEBUG_STRING_INFO),
     ('RipInfo', RIP_INFO),
 ]
-assert sizeof(N12_DEBUG_EVENT4DOLLAR_39E) == 84, sizeof(N12_DEBUG_EVENT4DOLLAR_39E)
-assert alignment(N12_DEBUG_EVENT4DOLLAR_39E) == 4, alignment(N12_DEBUG_EVENT4DOLLAR_39E)
+if not bit_64: assert sizeof(N12_DEBUG_EVENT4DOLLAR_39E) == 84, sizeof(N12_DEBUG_EVENT4DOLLAR_39E)
+else: assert sizeof(N12_DEBUG_EVENT4DOLLAR_39E) == 96, sizeof(N12_DEBUG_EVENT4DOLLAR_39E)
+if not bit_64: assert alignment(N12_DEBUG_EVENT4DOLLAR_39E) == 4, alignment(N12_DEBUG_EVENT4DOLLAR_39E)
+else: assert alignment(N12_DEBUG_EVENT4DOLLAR_39E) == 8, alignment(N12_DEBUG_EVENT4DOLLAR_39E)
 _DEBUG_EVENT._fields_ = [
     # C:/PROGRA~1/MICROS~2/VC98/Include/winbase.h 697
     ('dwDebugEventCode', DWORD),
@@ -384,8 +404,10 @@ _DEBUG_EVENT._fields_ = [
     ('dwThreadId', DWORD),
     ('u', N12_DEBUG_EVENT4DOLLAR_39E),
 ]
-assert sizeof(_DEBUG_EVENT) == 96, sizeof(_DEBUG_EVENT)
-assert alignment(_DEBUG_EVENT) == 4, alignment(_DEBUG_EVENT)
+if not bit_64: assert sizeof(_DEBUG_EVENT) == 96, sizeof(_DEBUG_EVENT)
+else: assert sizeof(_DEBUG_EVENT) == 112, sizeof(_DEBUG_EVENT)
+if not bit_64: assert alignment(_DEBUG_EVENT) == 4, alignment(_DEBUG_EVENT)
+else: assert alignment(_DEBUG_EVENT) == 8, alignment(_DEBUG_EVENT)
 LONG = c_long
 _LUID._fields_ = [
     # C:/PROGRA~1/gccxml/bin/Vc6/Include/winnt.h 394
@@ -419,5 +441,7 @@ _PROCESS_INFORMATION._fields_ = [
     ('dwProcessId', DWORD),
     ('dwThreadId', DWORD),
 ]
-assert sizeof(_PROCESS_INFORMATION) == 16, sizeof(_PROCESS_INFORMATION)
-assert alignment(_PROCESS_INFORMATION) == 4, alignment(_PROCESS_INFORMATION)
+if not bit_64: assert sizeof(_PROCESS_INFORMATION) == 16, sizeof(_PROCESS_INFORMATION)
+else: assert sizeof(_PROCESS_INFORMATION) == 24, sizeof(_PROCESS_INFORMATION)
+if not bit_64: assert alignment(_PROCESS_INFORMATION) == 4, alignment(_PROCESS_INFORMATION)
+else: assert alignment(_PROCESS_INFORMATION) == 8, alignment(_PROCESS_INFORMATION)

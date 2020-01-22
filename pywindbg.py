@@ -8,6 +8,7 @@ from colorama import Fore
 import commandParse
 import utilities
 
+
 version = "0.9"
 utils = utilities.Utilities()
 

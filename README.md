@@ -225,6 +225,7 @@ Note: `build_pywindbg.bat` and `build_buffer_overflow.bat` use an environment va
 - ~~Add shellcode injection.~~
 - ~~Dump SEH after breakpoint is hit.~~
 - Memory and hardware breakpoints.
+- Add 64 bit support.
 
 ## Installing Dependencies
 

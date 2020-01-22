@@ -35,6 +35,7 @@
 
 from my_ctypes import *
 from windows_h import *
+from ctypes.wintypes import ULONG
 
 ###
 ### manually declare entities from Tlhelp32.h since i was unable to import using h2xml.py.
@@ -58,19 +59,34 @@ class THREADENTRY32(Structure):
         ('dwFlags',            DWORD),
     ]
 
-class PROCESSENTRY32(Structure):
-    _fields_ = [
-        ('dwSize',              DWORD),
-        ('cntUsage',            DWORD),
-        ('th32ProcessID',       DWORD),
-        ('th32DefaultHeapID',   DWORD),
-        ('th32ModuleID',        DWORD),
-        ('cntThreads',          DWORD),
-        ('th32ParentProcessID', DWORD),
-        ('pcPriClassBase',      DWORD),
-        ('dwFlags',             DWORD),
-        ('szExeFile',           CHAR * 260),
-    ]
+if bit_64 is True:
+    class PROCESSENTRY32(Structure):
+        _fields_ = [
+            ('dwSize', DWORD),
+            ('cntUsage', DWORD),
+            ('th32ProcessID', DWORD),
+            ('th32DefaultHeapID', POINTER(ULONG)),
+            ('th32ModuleID', DWORD),
+            ('cntThreads', DWORD),
+            ('th32ParentProcessID', DWORD),
+            ('pcPriClassBase', LONG),
+            ('dwFlags', DWORD),
+            ('szExeFile', c_char * 260),
+        ]
+else:
+    class PROCESSENTRY32(Structure):
+        _fields_ = [
+            ('dwSize',              DWORD),
+            ('cntUsage',            DWORD),
+            ('th32ProcessID',       DWORD),
+            ('th32DefaultHeapID',   DWORD),
+            ('th32ModuleID',        DWORD),
+            ('cntThreads',          DWORD),
+            ('th32ParentProcessID', DWORD),
+            ('pcPriClassBase',      DWORD),
+            ('dwFlags',             DWORD),
+            ('szExeFile',           CHAR * 260),
+        ]
 
 class MODULEENTRY32(Structure):
     _fields_ = [

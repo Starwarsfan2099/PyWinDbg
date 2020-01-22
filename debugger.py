@@ -62,8 +62,9 @@ class debugger:
             self.processName = self.dbg.enumerate_modules()[0][0]
             self.pidLoaded = True
             return True
-        except:
+        except Exception as e:
             utils.dbgPrint("\n[-] Unable to attach to pid.\n", Fore.RED)
+            utils.dbgPrint("[-] Error: %s\n" % e, Fore.RED, verbose=self.verbose)
             return False
 
     def detach(self):

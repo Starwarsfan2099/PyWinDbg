@@ -57,6 +57,9 @@ import utilities
 from colorama import Fore
 
 utils = utilities.Utilities.getInstance()
+bit_64 = False
+if int(struct.calcsize("P") * 8) == 64:
+    bit_64 = True
 
 class pydbg:
     '''
@@ -259,8 +262,16 @@ class pydbg:
             thread_context = self.get_thread_context(thread_handle)
             selector_entry = LDT_ENTRY()
 
-            if not kernel32.GetThreadSelectorEntry(thread_handle, thread_context.SegFs, byref(selector_entry)):
-                self.win32_error("GetThreadSelectorEntry()")
+            if bit_64 is True:
+                if not kernel32.Wow64GetThreadSelectorEntry(thread_handle, thread_context.SegFs, byref(selector_entry)):
+                    error = kernel32.GetLastError()
+                    utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                    self.win32_error("GetThreadSelectorEntry()")
+            else:
+                if not kernel32.GetThreadSelectorEntry(thread_handle, thread_context.SegFs, byref(selector_entry)):
+                    error = kernel32.GetLastError()
+                    utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                    self.win32_error("GetThreadSelectorEntry()")
 
             self.close_handle(thread_handle)
 
@@ -1387,8 +1398,12 @@ class pydbg:
         thread_context = self.get_thread_context(thread_handle)
         selector_entry = LDT_ENTRY()
 
-        if not kernel32.GetThreadSelectorEntry(thread_handle, thread_context.SegFs, byref(selector_entry)):
-            self.win32_error("GetThreadSelectorEntry()")
+        if bit_64 is True:
+            if not kernel32.Wow64GetThreadSelectorEntry(thread_handle, thread_context.SegFs, byref(selector_entry)):
+                self.win32_error("GetThreadSelectorEntry()")
+        else:
+            if not kernel32.GetThreadSelectorEntry(thread_handle, thread_context.SegFs, byref(selector_entry)):
+                self.win32_error("GetThreadSelectorEntry()")
 
         teb  = selector_entry.BaseLow
         teb += (selector_entry.HighWord.Bits.BaseMid << 16) + (selector_entry.HighWord.Bits.BaseHi << 24)
@@ -1969,8 +1984,16 @@ class pydbg:
 
         utils.dbgPrint("[*] Getting debug privileges...\n", Fore.GREEN, verbose=self.verbose)
 
-        if not advapi32.OpenProcessToken(kernel32.GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, byref(h_token)):
-            raise pdx("OpenProcessToken()", True)
+        if bit_64 is True:
+            if not advapi32.OpenProcessToken(HANDLE(-1), TOKEN_ADJUST_PRIVILEGES, byref(h_token)):
+                error = kernel32.GetLastError()
+                utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                raise pdx("OpenProcessToken()", True)
+        else:
+            if not advapi32.OpenProcessToken(kernel32.GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, byref(h_token)):
+                error = kernel32.GetLastError()
+                utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                raise pdx("OpenProcessToken()", True)
 
         if not advapi32.LookupPrivilegeValueA(0, "seDebugPrivilege", byref(luid)):
             raise pdx("LookupPrivilegeValue()", True)
@@ -2222,8 +2245,16 @@ class pydbg:
         if not self.context:
             raise pdx("hide_debugger(): a thread context is required. Call me from a breakpoint handler.")
 
-        if not kernel32.GetThreadSelectorEntry(self.h_thread, self.context.SegFs, byref(selector_entry)):
-            self.win32_error("GetThreadSelectorEntry()")
+        if bit_64 is True:
+            if not kernel32.Wow64GetThreadSelectorEntry(self.h_thread, self.context.SegFs, byref(selector_entry)):
+                error = kernel32.GetLastError()
+                utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                self.win32_error("GetThreadSelectorEntry()")
+        else:
+            if not kernel32.GetThreadSelectorEntry(self.h_thread, self.context.SegFs, byref(selector_entry)):
+                error = kernel32.GetLastError()
+                utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                self.win32_error("GetThreadSelectorEntry()")
 
         fs_base  = selector_entry.BaseLow
         fs_base += (selector_entry.HighWord.Bits.BaseMid << 16) + (selector_entry.HighWord.Bits.BaseHi << 24)
@@ -2488,8 +2519,12 @@ class pydbg:
         selector_entry = LDT_ENTRY()
         thread_context = self.get_thread_context(pi.hThread)
 
-        if not kernel32.GetThreadSelectorEntry(pi.hThread, thread_context.SegFs, byref(selector_entry)):
-            self.win32_error("GetThreadSelectorEntry()")
+        if bit_64 is True:
+            if not kernel32.Wow64GetThreadSelectorEntry(pi.hThread, thread_context.SegFs, byref(selector_entry)):
+                self.win32_error("GetThreadSelectorEntry()")
+        else:
+            if not kernel32.GetThreadSelectorEntry(pi.hThread, thread_context.SegFs, byref(selector_entry)):
+                self.win32_error("GetThreadSelectorEntry()")
 
         teb  = selector_entry.BaseLow
         teb += (selector_entry.HighWord.Bits.BaseMid << 16) + (selector_entry.HighWord.Bits.BaseHi << 24)
@@ -2849,6 +2884,8 @@ class pydbg:
         while length:
             if not kernel32.ReadProcessMemory(self.h_process, address, read_buf, length, byref(count)):
                 if not len(data):
+                    error = kernel32.GetLastError()
+                    utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
                     raise pdx("ReadProcessMemory(%08x, %d, read=%d)" % (address, length, count.value), True)
                 else:
                     return data
@@ -2958,8 +2995,12 @@ class pydbg:
         if not context:
             context = self.context
 
-        if not kernel32.GetThreadSelectorEntry(self.h_thread, context.SegFs, byref(selector_entry)):
-            self.win32_error("GetThreadSelectorEntry()")
+        if bit_64 is True:
+            if not kernel32.Wow64GetThreadSelectorEntry(self.h_thread, context.SegFs, byref(selector_entry)):
+                self.win32_error("GetThreadSelectorEntry()")
+        else:
+            if not kernel32.GetThreadSelectorEntry(self.h_thread, context.SegFs, byref(selector_entry)):
+                self.win32_error("GetThreadSelectorEntry()")
 
         fs_base  = selector_entry.BaseLow
         fs_base += (selector_entry.HighWord.Bits.BaseMid << 16) + (selector_entry.HighWord.Bits.BaseHi << 24)
@@ -3268,8 +3309,12 @@ class pydbg:
         if not context:
             context = self.context
 
-        if not kernel32.GetThreadSelectorEntry(self.h_thread, context.SegFs, byref(selector_entry)):
-            self.win32_error("GetThreadSelectorEntry()")
+        if bit_64 is True:
+            if not kernel32.Wow64GetThreadSelectorEntry(self.h_thread, context.SegFs, byref(selector_entry)):
+                self.win32_error("GetThreadSelectorEntry()")
+        else:
+            if not kernel32.GetThreadSelectorEntry(self.h_thread, context.SegFs, byref(selector_entry)):
+                self.win32_error("GetThreadSelectorEntry()")
 
         fs_base  = selector_entry.BaseLow
         fs_base += (selector_entry.HighWord.Bits.BaseMid << 16) + (selector_entry.HighWord.Bits.BaseHi << 24)

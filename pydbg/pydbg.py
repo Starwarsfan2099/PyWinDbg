@@ -265,12 +265,12 @@ class pydbg:
             if bit_64 is True:
                 if not kernel32.Wow64GetThreadSelectorEntry(thread_handle, thread_context.SegFs, byref(selector_entry)):
                     error = kernel32.GetLastError()
-                    utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                    utils.dbgPrint("[-] Last error code: %s" % error, Fore.RED, verbose=self.verbose)
                     self.win32_error("GetThreadSelectorEntry()")
             else:
                 if not kernel32.GetThreadSelectorEntry(thread_handle, thread_context.SegFs, byref(selector_entry)):
                     error = kernel32.GetLastError()
-                    utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                    utils.dbgPrint("[-] Last error code: %s" % error, Fore.RED, verbose=self.verbose)
                     self.win32_error("GetThreadSelectorEntry()")
 
             self.close_handle(thread_handle)
@@ -1987,12 +1987,12 @@ class pydbg:
         if bit_64 is True:
             if not advapi32.OpenProcessToken(HANDLE(-1), TOKEN_ADJUST_PRIVILEGES, byref(h_token)):
                 error = kernel32.GetLastError()
-                utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                utils.dbgPrint("[-] Last error code: %s" % error, Fore.RED, verbose=self.verbose)
                 raise pdx("OpenProcessToken()", True)
         else:
             if not advapi32.OpenProcessToken(kernel32.GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, byref(h_token)):
                 error = kernel32.GetLastError()
-                utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                utils.dbgPrint("[-] Last error code: %s" % error, Fore.RED, verbose=self.verbose)
                 raise pdx("OpenProcessToken()", True)
 
         if not advapi32.LookupPrivilegeValueA(0, "seDebugPrivilege", byref(luid)):
@@ -2248,12 +2248,12 @@ class pydbg:
         if bit_64 is True:
             if not kernel32.Wow64GetThreadSelectorEntry(self.h_thread, self.context.SegFs, byref(selector_entry)):
                 error = kernel32.GetLastError()
-                utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                utils.dbgPrint("[-] Last error code: %s" % error, Fore.RED, verbose=self.verbose)
                 self.win32_error("GetThreadSelectorEntry()")
         else:
             if not kernel32.GetThreadSelectorEntry(self.h_thread, self.context.SegFs, byref(selector_entry)):
                 error = kernel32.GetLastError()
-                utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                utils.dbgPrint("[-] Last error code: %s" % error, Fore.RED, verbose=self.verbose)
                 self.win32_error("GetThreadSelectorEntry()")
 
         fs_base  = selector_entry.BaseLow
@@ -2885,7 +2885,7 @@ class pydbg:
             if not kernel32.ReadProcessMemory(self.h_process, address, read_buf, length, byref(count)):
                 if not len(data):
                     error = kernel32.GetLastError()
-                    utils.dbgPrint("[-] Last error code: %s\n" % error, Fore.RED, verbose=self.verbose)
+                    utils.dbgPrint("[-] Last error code: %s" % error, Fore.RED, verbose=self.verbose)
                     raise pdx("ReadProcessMemory(%08x, %d, read=%d)" % (address, length, count.value), True)
                 else:
                     return data

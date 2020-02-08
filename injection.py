@@ -91,54 +91,54 @@ def shellcodeInjectMapping(pid, verbose):
     from shellcode import shellcode
 
     # https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-openprocess
-    kernel32.OpenProcess.restype = HANDLE  # HANDLE OpenProcess(
-    kernel32.OpenProcess.argtypes = [DWORD,  # DWORD dwDesiredAccess,
-                                     c_bool,  # BOOL  bInheritHandle,
-                                     DWORD]  # DWORD dwProcessId );
+    kernel32.OpenProcess.restype = HANDLE       # HANDLE OpenProcess(
+    kernel32.OpenProcess.argtypes = [DWORD,     # DWORD dwDesiredAccess,
+                                     c_bool,    # BOOL  bInheritHandle,
+                                     DWORD]     # DWORD dwProcessId );
 
     # https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-createfilemappinga
-    kernel32.CreateFileMappingA.restype = HANDLE  # HANDLE CreateFileMappingA(
-    kernel32.CreateFileMappingA.argtypes = [HANDLE,  # HANDLE                hFile,
-                                            LPVOID,  # LPSECURITY_ATTRIBUTES lpFileMappingAttributes,
-                                            DWORD,  # DWORD                 flProtect,
-                                            DWORD,  # DWORD                 dwMaximumSizeHigh,
-                                            DWORD,  # DWORD                 dwMaximumSizeLow,
-                                            LPCSTR]  # LPCSTR                lpName );
+    kernel32.CreateFileMappingA.restype = HANDLE        # HANDLE CreateFileMappingA(
+    kernel32.CreateFileMappingA.argtypes = [HANDLE,     # HANDLE                hFile,
+                                            LPVOID,     # LPSECURITY_ATTRIBUTES lpFileMappingAttributes,
+                                            DWORD,      # DWORD                 flProtect,
+                                            DWORD,      # DWORD                 dwMaximumSizeHigh,
+                                            DWORD,      # DWORD                 dwMaximumSizeLow,
+                                            LPCSTR]     # LPCSTR                lpName );
 
     # https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-mapviewoffile
-    kernel32.MapViewOfFile.restype = LPVOID  # LPVOID MapViewOfFile(
-    kernel32.MapViewOfFile.argtypes = [HANDLE,  # HANDLE hFileMappingObject,
-                                       DWORD,  # DWORD  dwDesiredAccess,
-                                       DWORD,  # DWORD  dwFileOffsetHigh,
-                                       DWORD,  # DWORD  dwFileOffsetLow,
-                                       c_size_t]  # SIZE_T dwNumberOfBytesToMap );
+    kernel32.MapViewOfFile.restype = LPVOID         # LPVOID MapViewOfFile(
+    kernel32.MapViewOfFile.argtypes = [HANDLE,      # HANDLE hFileMappingObject,
+                                       DWORD,       # DWORD  dwDesiredAccess,
+                                       DWORD,       # DWORD  dwFileOffsetHigh,
+                                       DWORD,       # DWORD  dwFileOffsetLow,
+                                       c_size_t]    # SIZE_T dwNumberOfBytesToMap );
 
     # https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/memcpy-wmemcpy?view=vs-2019
-    cdll.msvcrt.memcpy.restype = c_void_p  # void *memcpy(
-    cdll.msvcrt.memcpy.argtypes = [c_void_p,  # void *dest,
-                                   c_char_p,  # const void *src,
-                                   c_int]  # size_t count );
+    cdll.msvcrt.memcpy.restype = c_void_p       # void *memcpy(
+    cdll.msvcrt.memcpy.argtypes = [c_void_p,    # void *dest,
+                                   c_char_p,    # const void *src,
+                                   c_int]       # size_t count );
 
     # https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-mapviewoffilenuma2
-    KernelBase.MapViewOfFileNuma2.restype = LPVOID  # PVOID MapViewOfFileNuma2(
-    KernelBase.MapViewOfFileNuma2.argtypes = [HANDLE,  # HANDLE  FileMappingHandle,
-                                              HANDLE,  # HANDLE  ProcessHandle,
+    KernelBase.MapViewOfFileNuma2.restype = LPVOID          # PVOID MapViewOfFileNuma2(
+    KernelBase.MapViewOfFileNuma2.argtypes = [HANDLE,       # HANDLE  FileMappingHandle,
+                                              HANDLE,       # HANDLE  ProcessHandle,
                                               c_ulonglong,  # ULONG64 Offset,
-                                              c_void_p,  # PVOID   BaseAddress,
-                                              c_size_t,  # SIZE_T  ViewSize,
-                                              c_ulong,  # ULONG   AllocationType,
-                                              c_ulong,  # ULONG   PageProtection,
-                                              c_ulong]  # ULONG   PreferredNode );
+                                              c_void_p,     # PVOID   BaseAddress,
+                                              c_size_t,     # SIZE_T  ViewSize,
+                                              c_ulong,      # ULONG   AllocationType,
+                                              c_ulong,      # ULONG   PageProtection,
+                                              c_ulong]      # ULONG   PreferredNode );
 
     # https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createremotethread
-    kernel32.CreateRemoteThread.restype = HANDLE  # HANDLE CreateRemoteThread(
-    kernel32.CreateRemoteThread.argtypes = [HANDLE,  # HANDLE                 hProcess,
-                                            LPSECURITY_ATTRIBUTES,  # LPSECURITY_ATTRIBUTES  lpThreadAttributes,
-                                            c_size_t,  # SIZE_T                 dwStackSize,
-                                            LPTHREAD_START_ROUTINE,  # LPTHREAD_START_ROUTINE lpStartAddress,
-                                            LPVOID,  # LPVOID                 lpParameter,
-                                            DWORD,  # DWORD                  dwCreationFlags,
-                                            LPDWORD]  # LPDWORD                lpThreadId );
+    kernel32.CreateRemoteThread.restype = HANDLE                        # HANDLE CreateRemoteThread(
+    kernel32.CreateRemoteThread.argtypes = [HANDLE,                     # HANDLE                 hProcess,
+                                            LPSECURITY_ATTRIBUTES,      # LPSECURITY_ATTRIBUTES  lpThreadAttributes,
+                                            c_size_t,                   # SIZE_T                 dwStackSize,
+                                            LPTHREAD_START_ROUTINE,     # LPTHREAD_START_ROUTINE lpStartAddress,
+                                            LPVOID,                     # LPVOID                 lpParameter,
+                                            DWORD,                      # DWORD                  dwCreationFlags,
+                                            LPDWORD]                    # LPDWORD                lpThreadId );
 
     # Get a handle to the target process
     hProc = kernel32.OpenProcess(

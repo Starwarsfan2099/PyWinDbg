@@ -112,25 +112,6 @@ class debugger:
         utils.dbgPrint("")
         return True
 
-    def isProcess64Bit(self, processId):
-        '''return None if unknown, maybe open process failed'''
-        try:
-            func = ctypes.windll.ntdll.ZwWow64ReadVirtualMemory64  # only 64 bit OS has this function
-        except Exception as ex:
-            return False
-        try:
-            IsWow64Process = ctypes.windll.kernel32.IsWow64Process
-        except Exception as ex:
-            return False
-        hProcess = ctypes.windll.kernel32.OpenProcess(0x0400, 0, processId);  # PROCESS_QUERY_INFORMATION=0x0400
-        if hProcess:
-            is64Bit = ctypes.c_int32()
-            if IsWow64Process(hProcess, ctypes.byref(is64Bit)):
-                ctypes.windll.kernel32.CloseHandle(hProcess)
-                return False if is64Bit.value else True
-            else:
-                ctypes.windll.kernel32.CloseHandle(hProcess)
-
     def pidInfo(self, pid):
         try:
             p = psutil.Process(pid)
@@ -146,11 +127,6 @@ class debugger:
             utils.dbgPrint("[*] Status: ", Fore.GREEN, secondLine="%s" % p.status())
             utils.dbgPrint("[*] Username: ", Fore.GREEN, secondLine="%s" % p.username())
             utils.dbgPrint("[*] Process creation time: ", Fore.GREEN, secondLine="%f" % p.create_time())
-            process64Bit = self.isProcess64Bit(pid)
-            if process64Bit is True:
-                utils.dbgPrint("[*] Bit: ", Fore.GREEN, secondLine="64")
-            else:
-                utils.dbgPrint("[*] Bit: ", Fore.GREEN, secondLine="32")
             utils.dbgPrint("[*] Threads: ", Fore.GREEN, secondLine="%d\n" % p.num_threads())
         except psutil.NoSuchProcess:
             utils.dbgPrint("\n[-] Process with a PID of %d not found.\n" % pid, Fore.RED)

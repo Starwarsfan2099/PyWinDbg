@@ -1,6 +1,7 @@
 # Don't track content of these folders
 .idea/
-build/
+build/tmp/
+build/spec/
 
 # Or these files
 *.spec

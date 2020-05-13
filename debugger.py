@@ -3,7 +3,6 @@
 # Created by Starwarsfan2099 on 6/4/2019
 
 import os
-import struct
 import pefile
 import psutil
 from colorama import Fore
@@ -82,7 +81,7 @@ class debugger:
 
     def disableHidden(self):
         utils.dbgPrint("\n[*] Debugger will  no longer be hidden.\n", Fore.GREEN)
-        self.dbg.setHiddden(False)
+        self.dbg.setHidden(False)
 
     def createSnapshot(self):
         self.dbg.process_snapshot()

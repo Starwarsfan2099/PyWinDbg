@@ -200,13 +200,13 @@ WARNING: If an executable is passed it will produce a lot of output so it's best
 `-x`: Hide the debugger after the first breakpoint.
 
 ### Other Files
-`build_pywindbg.bat`: Script to build an executable using pyinstaller.
+`build\build_pywindbg.bat`: Script to build an executable using pyinstaller.
 
-`build_pywindbg_xp.bat`: Script to build an executable using pyinstaller that supports Windows XP.
+`build\build_pywindbg_xp.bat`: Script to build an executable using pyinstaller that supports Windows XP.
 
-`build_buffer_overflow.bat`: Script to build an executable for `bufferOverflow.py` using pyinstaller.
+`build\build_buffer_overflow.bat`: Script to build an executable for `bufferOverflow.py` using pyinstaller.
 
-`build_dll.bat`: Script to build the `helloDLL.dll` included for injection. It must be ran from the Visual Studio Developer Command Prompt.
+`build\build_dll.bat`: Script to build the `helloDLL.dll` included for injection. It must be ran from the Visual Studio Developer Command Prompt.
 
 `helloDLL.cpp`: Source for the compiled DLL included.
 

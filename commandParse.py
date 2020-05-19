@@ -64,7 +64,7 @@ class Parser:
 
         utils.dbgPrint(" a  | attach PID                    Attach to a process ID, or to the PID variable if set.")
         utils.dbgPrint(" d  | detach                        Detach from a process.")
-        utils.dbgPrint(" l  | list NAME|PID                 List current PID's, or search one by name or PID.")
+        utils.dbgPrint(" l  | list NAME|PID                 List current PID's, or search one by name or PID. (l -m NAME|PID) shows more info.")
         utils.dbgPrint(" o  | open EXE                      Launch and attach to an executable, or the executable set in the EXECUTABLE variable.")
         utils.dbgPrint(" r  | run ARGS                      Starts the opened or attached process with args.")
         utils.dbgPrint(" c  | continue                      Continue execution after hitting a breakpoint.")
@@ -137,10 +137,15 @@ class Parser:
         elif command == 'clear' or command == 'cl':                                       # cl or clear
             os.system("cls")
         elif splitCommand[0] == 'l' or splitCommand[0] == 'list':                         # l or list
-            if len(splitCommand) == 1:
-                dbg.processList()
-            else:
+            if len(splitCommand) == 2:
                 dbg.processList(searchName=str(splitCommand[1]))
+            elif len(splitCommand) == 3:
+                if splitCommand[1] == "-m":
+                    dbg.processList(searchName=str(splitCommand[2]), moreInfo=True)
+                else:
+                    dbg.processList()
+            else:
+                dbg.processList()
         elif command == 'help' or command == "?":                                         # ? or help
             self.help()
         elif splitCommand[0] == 'pm' or splitCommand[0] == "process_monitor":             # pm or process_monitor

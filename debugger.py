@@ -93,21 +93,33 @@ class debugger:
         utils.dbgPrint("\n[+] Restored snapshot of process.", Fore.GREEN)
         return True
 
-    def processList(self, searchName=None):
+    def processList(self, searchName=None, moreInfo=False):
         utils.dbgPrint("\n[+] Getting Process List...\n", Fore.GREEN)
         if searchName is None:
             for (pid, name) in self.dbg.enumerate_processes():
                 if pid != os.getpid():
-                    utils.dbgPrint("[+] Name: ", Fore.GREEN, secondLine="%s PID:%s" % (name, pid))
+                    if moreInfo is False:
+                        utils.dbgPrint("[+] Name: ", Fore.GREEN, secondLine="%s PID:%s" % (name, pid))
+                    else:
+                        self.pidInfo(pid)
                 else:
-                    utils.dbgPrint("[+] Name: %s PID:%s     <==[Current Debugger Process] " % (name, pid), Fore.GREEN)
+                    if moreInfo is False:
+                        utils.dbgPrint("[+] Name: %s PID:%s     <==[Current Debugger Process] " % (name, pid), Fore.GREEN)
+                    else:
+                        self.pidInfo(pid)
         else:
             for (pid, name) in self.dbg.enumerate_processes():
                 if searchName.lower() in name.lower() or searchName in str(pid):
                     if pid != os.getpid():
-                        utils.dbgPrint("[+] Name: ", Fore.GREEN, secondLine="%s PID:%s" % (name, pid))
+                        if moreInfo is False:
+                            utils.dbgPrint("[+] Name: ", Fore.GREEN, secondLine="%s PID:%s" % (name, pid))
+                        else:
+                            self.pidInfo(pid)
                     else:
-                        utils.dbgPrint("[+] Name: %s PID:%s     <==[Current Debugger Process] " % (name, pid), Fore.GREEN)
+                        if moreInfo is False:
+                            utils.dbgPrint("[+] Name: %s PID:%s     <==[Current Debugger Process] " % (name, pid), Fore.GREEN)
+                        else:
+                            self.pidInfo(pid)
         utils.dbgPrint("")
         return True
 

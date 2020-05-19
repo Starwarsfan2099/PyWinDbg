@@ -24,7 +24,7 @@ by Starwarsfan2099
 
  a  | attach PID                    Attach to a process ID, or to the PID variable if set.
  d  | detach                        Detach from a process.
- l  | list NAME|PID                 List current PID's, or search one by name or PID.
+ l  | list NAME|PID                 List current PID's, or search one by name or PID. (l -m NAME|PID) shows more info."
  o  | open EXE                      Launch and attach to an executable, or the executable set in the EXECUTABLE variable.
  r  | run ARGS                      Starts the opened or attached process with args.
  c  | continue                      Continue execution after hitting a breakpoint.

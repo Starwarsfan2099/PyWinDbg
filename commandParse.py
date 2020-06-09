@@ -1,7 +1,7 @@
 # commandParse.py
 # Created by Starwarsfan2099 on 4/22/2019
 
-import datetime
+from datetime import datetime
 import os
 from subprocess import check_output
 from sys import exit
@@ -14,7 +14,7 @@ import tools
 from pydbg.defines import *
 
 init(autoreset=True)
-currentTime = datetime.datetime.now()
+currentTime = datetime.now()
 utils = utilities.Utilities.getInstance()
 dbg = debugger.debugger()
 
@@ -322,80 +322,80 @@ class Parser:
         if len(command) < 3:
             utils.dbgPrint("\n[-] Incorrect usage, it should be \'set VARIABLE VALUE\'\n", Fore.RED)
             return False
-        input = command[1].lower().strip()
+        input_var = command[1].lower().strip()
         value = command[2].strip()
-        if input in self.variables:
-            if input == "logfile":                                                      # Logfile
+        if input_var in self.variables:
+            if input_var == "logfile":                                                      # Logfile
                 if ".txt" in value:
-                    self.variables[input] = value
-                    utils.dbgPrint("\n%s = %s\n" % (input, str(self.variables[input])))
+                    self.variables[input_var] = value
+                    utils.dbgPrint("\n%s = %s\n" % (input_var, str(self.variables[input_var])))
                     self.variableParse("set logging true")
                     return
                 else:
                     utils.dbgPrint("\n[-] Must be a .txt file\n", Fore.RED)
                     return
-            elif input == "pid":                                                        # PID
-                self.variables[input] = int(value)
-            elif input == "verbose":                                                    # Verbose
+            elif input_var == "pid":                                                        # PID
+                self.variables[input_var] = int(value)
+            elif input_var == "verbose":                                                    # Verbose
                 if value.lower() == "true":
-                    self.variables[input] = True
+                    self.variables[input_var] = True
                     dbg.setVerbose(True)
                 elif value.lower() == "false":
-                    self.variables[input] = False
+                    self.variables[input_var] = False
                     dbg.setVerbose(False)
                 else:
                     utils.dbgPrint("\n[-] Incorrect variable value given\n", Fore.RED)
                     return
-            elif input == "debug":                                                    # Debug
+            elif input_var == "debug":                                                    # Debug
                 if value.lower() == "true":
-                    self.variables[input] = True
+                    self.variables[input_var] = True
                     self.debug = True
                     dbg.setDebug(True)
                 elif value.lower() == "false":
-                    self.variables[input] = False
+                    self.variables[input_var] = False
                     self.debug = False
                     dbg.setDebug(False)
                 else:
                     utils.dbgPrint("\n[-] Incorrect variable value given\n", Fore.RED)
                     return
-            elif input == "crash-mode":                                                # Crash Mode
+            elif input_var == "crash-mode":                                                # Crash Mode
                 if value.lower() == "true":
-                    self.variables[input] = True
+                    self.variables[input_var] = True
                     dbg.enableCrashMode()
                 elif value.lower() == "false":
-                    self.variables[input] = False
+                    self.variables[input_var] = False
                     dbg.disableCrashMode()
                 else:
                     utils.dbgPrint("\n[-] Incorrect variable value given\n", Fore.RED)
                     return
-            elif input == "file-mode":                                                  # File Mode
+            elif input_var == "file-mode":                                                  # File Mode
                 if value.lower() == "true":
-                    self.variables[input] = True
+                    self.variables[input_var] = True
                     self.fileMode = True
                 elif value.lower() == "false":
-                    self.variables[input] = False
+                    self.variables[input_var] = False
                     self.fileMode = False
                     dbg.disableFileMode()
                 else:
                     utils.dbgPrint("\n[-] Incorrect variable value given\n", Fore.RED)
                     return
-            elif input == "hide-debugger":                                              # Hide debugger
+            elif input_var == "hide-debugger":                                              # Hide debugger
                 if value.lower() == "true":
-                    self.variables[input] = True
+                    self.variables[input_var] = True
                     dbg.enableHidden()
                 elif value.lower() == "false":
-                    self.variables[input] = False
+                    self.variables[input_var] = False
                     dbg.disableHidden()
                 else:
                     utils.dbgPrint("\n[-] Incorrect variable value given\n", Fore.RED)
                     return
-            elif input == "logging":                                                    # Logging
+            elif input_var == "logging":                                                    # Logging
                 if value.lower() == "true":
-                    self.variables[input] = True
+                    self.variables[input_var] = True
                     utils.logging = True
                     utils.dbgLogFileCreate(self.variables["logfile"])
                 elif value.lower() == "false":
-                    self.variables[input] = False
+                    self.variables[input_var] = False
                     utils.logging = False
                     try:
                         utils.dbgLogFileClose()
@@ -410,7 +410,7 @@ class Parser:
         else:
             utils.dbgPrint("\n[-] Incorrect variable name given\n", Fore.RED)
             return
-        utils.dbgPrint("\n[DEBUG] %s = %s\n" % (input, str(self.variables[input])), verbose=self.debug)
+        utils.dbgPrint("\n[DEBUG] %s = %s\n" % (input_var, str(self.variables[input_var])), verbose=self.debug)
         return True
 
     # Check if a PID is valid and attach to it

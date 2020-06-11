@@ -54,14 +54,17 @@ class Utilities:
     # File logging functions
     def dbgLogFileWrite(self, line):
         self.log.write(line + "\n")
+        return True
 
     def dbgLogFileClose(self):
         self.log.close()
+        return True
 
     def dbgLogFileCreate(self, fileName):
         self.logfileName = fileName
         self.log = open(fileName, "w+")
         self.log.write("PyWinDbg\nBy Starwarsfan2099\nLog file:\n")
+        return True
 
     # String to hex string
     def toHex(self, s):

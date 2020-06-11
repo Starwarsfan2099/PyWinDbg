@@ -78,10 +78,12 @@ class debugger:
     def enableHidden(self):
         utils.dbgPrint("[*] Debugger will be hidden after the first breakpoint is hit.", Fore.GREEN)
         self.dbg.setHidden(True)
+        return True
 
     def disableHidden(self):
         utils.dbgPrint("\n[*] Debugger will  no longer be hidden.\n", Fore.GREEN)
         self.dbg.setHidden(False)
+        return True
 
     def createSnapshot(self):
         self.dbg.process_snapshot()
@@ -145,6 +147,7 @@ class debugger:
         except psutil.AccessDenied:
             utils.dbgPrint("\n[-] Process with a PID of %d could not be accessed.\n" % pid, Fore.RED)
             return False
+        return True
 
     def parseBinaryInfo(self, info):
         for line in info.split("\n"):
@@ -162,6 +165,7 @@ class debugger:
                 utils.dbgPrint(line, Fore.CYAN)
             else:
                 utils.dbgPrint(line)
+        return True
 
     def dumpInfo(self, command):
         if len(command.split()) == 1:
@@ -188,6 +192,7 @@ class debugger:
                     self.parseBinaryInfo(pe.dump_info())
                 except WindowsError:
                     utils.dbgPrint("\n[-] Unable to find file %s\n" % command.split()[1], Fore.RED)
+        return True
 
     def setupExeptionHandlers(self):
 
@@ -237,6 +242,7 @@ class debugger:
         self.dbg.set_callback(UNLOAD_DLL_DEBUG_EVENT, seven)
         self.dbg.set_callback(OUTPUT_DEBUG_STRING_EVENT, eight)
         self.dbg.set_callback(RIP_EVENT, nine)
+        return True
 
     def getLibraries(self):
         i = 0
@@ -380,7 +386,7 @@ class debugger:
             utils.dbgPrint("[*] ECX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Ecx, context.Ecx, hexRegister.strip().decode("hex")), Fore.GREEN)
             hexRegister = "%08x" % context.Edx
             utils.dbgPrint("[*] EDX: 0x%08x, - Decimal: %d, ASCII: %s" % (context.Edx, context.Edx, hexRegister.strip().decode("hex")), Fore.GREEN)
-            return True
+        return True
 
     def getRegister(self, register, thread=None):
         if thread is None:
@@ -424,6 +430,7 @@ class debugger:
                     else: return False
                 else: return False
         # self.dbg.resume_all_threads()
+        return True
 
     def setRegister(self, register, value, thread=None):
         if thread is None:
@@ -605,6 +612,7 @@ class debugger:
             else:
                 utils.dbgPrint("\n[-] Error, invalid register name chosen.", Fore.RED)
                 return False
+        return True
 
     def enableCrashMode(self):
         def check_accessv(dbg):
@@ -632,12 +640,14 @@ class debugger:
 
         self.dbg.set_callback(EXCEPTION_ACCESS_VIOLATION, check_accessv)
         utils.dbgPrint("\n[+] Crash mode hooks in place.\n", Fore.GREEN, verbose=self.verbose)
+        return True
 
     def disableCrashMode(self):
         def doNothing(dbg):
             return DBG_EXCEPTION_HANDLED
 
         self.dbg.set_callback(EXCEPTION_ACCESS_VIOLATION, doNothing)
+        return True
 
     def enableFileMode(self):
         def handler_CreateFileW(dbg):
@@ -667,6 +677,7 @@ class debugger:
         utils.dbgPrint("[*]Resolving %s @ Unknown" % function2, Fore.GREEN)
         self.dbg.bp_set(CreateFileA, description="CreateFileA", handler=handler_CreateFileA)
         self.dbg.bp_set(CreateFileW, description="CreateFileW", handler=handler_CreateFileW)
+        return True
 
     def disableFileMode(self):
         def doNothing(dbg):
@@ -676,13 +687,18 @@ class debugger:
         CreateFileA = self.dbg.func_resolve_debuggee("kernel32.dll", "CreateFileA")
         self.dbg.bp_set(CreateFileA, description="CreateFileA", handler=doNothing)
         self.dbg.bp_set(CreateFileW, description="CreateFileW", handler=doNothing)
+        return True
 
     def dllInject(self, pid, dll):
         inject = injection.dllInject(pid, dll, self.verbose)
         if inject is True:
             utils.dbgPrint("[+] DLL injection completed.", Fore.GREEN)
+            return True
+        return False
 
     def shellcodeInject(self, pid):
         inject = injection.shellcodeInjectMapping(pid, self.verbose)
         if inject is True:
             utils.dbgPrint("[+] Shellcode injection completed.", Fore.GREEN)
+            return True
+        return False

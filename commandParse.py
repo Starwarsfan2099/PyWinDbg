@@ -142,6 +142,8 @@ class Parser:
             elif len(splitCommand) == 3:
                 if splitCommand[1] == "-m":
                     dbg.processList(searchName=str(splitCommand[2]), moreInfo=True)
+                elif splitCommand[2] == "-m":
+                    dbg.processList(searchName=str(splitCommand[1]), moreInfo=True)
                 else:
                     dbg.processList()
             else:
